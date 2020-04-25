@@ -1,12 +1,47 @@
 {
   "name": "cards-general-2004",
   "version": "1.0.0",
-  "description": "",
+  "description": "General Deck of Cards",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build-client": "webpack",
+    "build-client-watch": "webpack -w",
+    "start-server": "nodemon server -e html,js,scss --ignore public --ignore client",
+    "start-dev": "NODE_ENV='development' npm run build-client-watch & NODE_ENV='development' npm run start-server",
+    "start": "node server",
+    "deploy": "script/deploy"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "compression": "^1.7.4",
+    "express": "^4.17.1",
+    "morgan": "^1.10.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-router-dom": "^5.1.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/preset-env": "^7.9.5",
+    "@babel/preset-react": "^7.9.4",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-eslint": "^10.1.0",
+    "babel-loader": "^8.1.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "css-loader": "^3.5.3",
+    "eslint": "^6.8.0",
+    "eslint-plugin-react": "^7.19.0",
+    "file-loader": "^6.0.0",
+    "style-loader": "^1.2.0",
+    "url-loader": "^4.1.0",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
+  }
 }

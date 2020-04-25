@@ -1,0 +1,12 @@
+# Ignore Folders
+node_modules/*
+.vscode/*
+script
+
+# Ignore Compiled Public Files
+public/bundle.js
+public/bundle.js.map
+
+# Ignore Public Files
+public/images
+
