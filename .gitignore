@@ -9,4 +9,4 @@ public/bundle.js.map
 
 # Ignore Public Files
 public/images
-
+secrets.js
