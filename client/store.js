@@ -41,8 +41,8 @@ const reducer = (state = initialState, action) => {
 const middleware = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const store = createStore(
-  reducer,
-  middleware(applyMiddleware(createLogger({ collapsed: true })))
+  reducer
+  // middleware(applyMiddleware(createLogger({ collapsed: true })))
 );
 
 export default store;

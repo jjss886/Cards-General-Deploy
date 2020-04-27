@@ -22,7 +22,7 @@ class Home extends Component {
 
       if (!channels.includes(str)) {
         addChannel(str);
-        history.push({ pathname: `/Room/${str}`, state: { hello: "hello" } });
+        history.push({ pathname: `/Room/${str}`, state: { channel: str } });
         return;
       }
     }
@@ -38,7 +38,7 @@ class Home extends Component {
       { channels, history } = this.props;
 
     if (channels.includes(channel)) {
-      history.push({ pathname: `/Room/${channel}`, state: { hello: "hello" } });
+      history.push({ pathname: `/Room/${channel}`, state: { channel } });
       this.setState({ channel: "" });
     } else alert("Room Not Available");
   };
