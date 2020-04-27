@@ -5,6 +5,9 @@ const Room = (props) => {
   return (
     <div>
       <h3>Room!</h3>
+      <button type="button" onClick={props.history.goBack}>
+        Back
+      </button>
     </div>
   );
 };

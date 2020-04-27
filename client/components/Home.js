@@ -34,9 +34,10 @@ class Home extends Component {
 
   handleSubmit = (evt) => {
     evt.preventDefault();
-    const { channel } = this.state;
+    const { channel } = this.state,
+      { channels, history } = this.props;
 
-    if (this.props.channels.includes(channel)) {
+    if (channels.includes(channel)) {
       history.push({ pathname: `/Room/${channel}`, state: { hello: "hello" } });
       this.setState({ channel: "" });
     } else alert("Room Not Available");
