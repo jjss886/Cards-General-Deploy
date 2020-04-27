@@ -1,11 +1,26 @@
-const suits = ["Spades", "Hearts", "Diamonds", "Clubs"],
-  values = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"];
+const suits = ["Spades", "Hearts", "Diamonds", "Clubs"];
+const values = [
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "J",
+  "Q",
+  "K",
+  "A",
+];
+export const channelOption = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 
 export const createDeck = () => {
   const deck = new Array();
 
-  for (const value of values) {
-    for (const suit of suits) {
+  for (const suit of suits) {
+    for (const value of values) {
       let weight1 = parseInt(val),
         weight2 = parseInt(val);
 
