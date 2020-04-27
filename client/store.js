@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware, compose } from "redux";
 import { createLogger } from "redux-logger";
-// import { composeWithDevTools } from "redux-devtools-extension";
+import socket from "./utils/socket";
 
 // ---------------- INITIAL STATE ----------------
 const initialState = {};
