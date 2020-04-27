@@ -20,7 +20,7 @@ class Home extends Component {
         str += channelOption[x];
       }
 
-      if (!channels.includes(str)) {
+      if (!(str in channels)) {
         addChannel(str);
         history.push({ pathname: `/Room/${str}`, state: { channel: str } });
         return;
@@ -37,14 +37,14 @@ class Home extends Component {
     const { channel } = this.state,
       { channels, history } = this.props;
 
-    if (channels.includes(channel)) {
+    if (channel in channels) {
       history.push({ pathname: `/Room/${channel}`, state: { channel } });
       this.setState({ channel: "" });
     } else alert("Room Not Available");
   };
 
   render() {
-    const { channels } = this.props;
+    const { rooms } = this.props;
 
     return (
       <div className="houseDiv mainDiv">
@@ -64,9 +64,7 @@ class Home extends Component {
           <button type="submit">Join</button>
         </form>
 
-        <div>
-          {channels ? channels.map((x, i) => <p key={i}>{x}</p>) : null}
-        </div>
+        <div>{rooms ? rooms.map((x, i) => <p key={i}>{x}</p>) : null}</div>
       </div>
     );
   }
@@ -74,6 +72,7 @@ class Home extends Component {
 
 const mapState = (state) => ({
   channels: state.channels,
+  rooms: Object.keys(state.channels),
 });
 
 const mapDispatch = (dispatch) => ({
