@@ -15,7 +15,7 @@ export const createDeck = () => {
       if (value === "K") weight1 = 13;
       if (value === "A") weight1 = 1;
 
-      // BETTER FOR CARD GAMBLING
+      // BLACKJACK CARD VALUES
       if (value === "J" || value === "Q" || value === "K") weight2 = 10;
       if (value === "A") weight2 = 11;
 
