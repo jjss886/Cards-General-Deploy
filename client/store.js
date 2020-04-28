@@ -7,31 +7,39 @@ const initialState = { channels: {} };
 const initialChannel = {
   players: [],
   deck: [],
+  table: [],
 };
-const initialPlayer = {
-  id: "",
-  name: "",
+const initialPlayer = (id, name) => ({
+  id,
+  name,
   hand: [],
+  points: 0,
+});
+
+// ---------------- HELPERS ----------------
+export const newChannelFn = (name) => {
+  const channelObj = { ...initialChannel };
+  channelObj.players = [initialPlayer(1, name)];
+
+  return channelObj;
 };
 
 // ---------------- ACTION TYPES ----------------
 const ADD_CHANNEL = "ADD_CHANNEL";
+const ADD_PLAYER = "ADD_PLAYER";
 
 // ---------------- ACTION CREATORS ----------------
-export const addNewChannel = (channel, name) => {
-  const playerObj = { ...initialPlayer };
-  playerObj.id = 1;
-  playerObj.name = name;
+export const addNewChannel = (channel, name) => ({
+  type: ADD_CHANNEL,
+  channel,
+  channelObj: newChannelFn(name),
+});
 
-  const channelObj = { ...initialChannel };
-  channelObj.players.push(playerObj);
-
-  return {
-    type: ADD_CHANNEL,
-    channel,
-    channelObj,
-  };
-};
+export const addNewPlayer = (channel, name) => ({
+  type: ADD_PLAYER,
+  channel,
+  name,
+});
 
 // ---------------- REDUCER ----------------
 const reducer = (state = initialState, action) => {
@@ -40,6 +48,22 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         channels: { ...state.channels, [action.channel]: action.channelObj },
+      };
+    case ADD_PLAYER:
+      const room = action.channel,
+        channelObj = { ...state.channels[room] };
+
+      channelObj.players = [
+        ...channelObj.players,
+        initialPlayer(channelObj.players.length + 1, action.name),
+      ];
+
+      return {
+        ...state,
+        channels: {
+          ...state.channels,
+          [room]: channelObj,
+        },
       };
     default:
       return state;

@@ -8,7 +8,6 @@ import { createMemoryHistory, createBrowserHistory } from "history";
 import "./utils/style.css";
 import Home from "./components/Home";
 import Room from "./components/Room";
-// import SingleRoom from "./components/SingleRoom";
 
 const history =
   process.env.NODE_ENV === "test"
