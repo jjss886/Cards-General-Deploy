@@ -12,7 +12,7 @@ class Room extends Component {
       <div className="mainDiv">
         <h3>Welcome to room: {room}</h3>
 
-        <button type="button" onClick={history.goBack}>
+        <button type="button" onClick={history.goBack} className="gBtn">
           Back
         </button>
 

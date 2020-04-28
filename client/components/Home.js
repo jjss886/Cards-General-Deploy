@@ -74,7 +74,7 @@ class Home extends Component {
           placeholder="name"
         />
 
-        <button type="button" onClick={this.roomCreate}>
+        <button type="button" className="gBtn" onClick={this.roomCreate}>
           Create Room!
         </button>
 
@@ -86,7 +86,9 @@ class Home extends Component {
             placeholder="channel"
           />
 
-          <button type="submit">Join</button>
+          <button type="submit" className="gBtn">
+            Join
+          </button>
         </form>
 
         <div>{rooms ? rooms.map((x, i) => <p key={i}>{x}</p>) : null}</div>

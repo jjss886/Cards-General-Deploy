@@ -48,6 +48,21 @@ p {
   border: 1px solid black;
   border-radius: 5px;
 }
+
+.gBtn {
+  height: 20px;
+  width: 115px;
+  font-size: 13px;
+  font-weight: bold;
+  border: 1px solid black;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.gBtn:hover {
+  background-color: lightskyblue;
+}
+
 /* #endregion  */
 
 /* #region ------------------ HOME ------------------ */
