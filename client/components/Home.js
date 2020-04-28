@@ -1,16 +1,16 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { addChannel } from "../store";
+import { addNewChannel } from "../store";
 import { channelOption } from "../utils/utilities";
 
 class Home extends Component {
   constructor() {
     super();
-    this.state = { channel: "" };
+    this.state = { channel: "", name: "" };
   }
 
   roomCreate = () => {
-    const { channels, addChannel, history } = this.props;
+    const { channels, addNewChannel, history } = this.props;
 
     while (true) {
       let str = "";
@@ -21,7 +21,7 @@ class Home extends Component {
       }
 
       if (!(str in channels)) {
-        addChannel(str);
+        addNewChannel(str, this.state.name);
         history.push({ pathname: `/Room/${str}`, state: { channel: str } });
         return;
       }
@@ -34,11 +34,11 @@ class Home extends Component {
 
   handleSubmit = (evt) => {
     evt.preventDefault();
-    const { channel } = this.state,
+    const { channel, name } = this.state,
       { channels, history } = this.props;
 
     if (channel in channels) {
-      history.push({ pathname: `/Room/${channel}`, state: { channel } });
+      history.push({ pathname: `/Room/${channel}`, state: { channel, name } });
       this.setState({ channel: "" });
     } else alert("Room Not Available");
   };
@@ -50,19 +50,31 @@ class Home extends Component {
       <div className="houseDiv mainDiv">
         <h3>Home to General Cards</h3>
 
-        <button type="button" onClick={this.roomCreate}>
-          Create Room!
-        </button>
+        <input
+          name="name"
+          value={this.state.name}
+          onChange={this.handleChange}
+          placeholder="name"
+        />
 
-        <form onSubmit={this.handleSubmit}>
-          <input
-            value={this.state.channel}
-            name="channel"
-            onChange={this.handleChange}
-          />
+        {this.state.name.length ? (
+          <>
+            <button type="button" onClick={this.roomCreate}>
+              Create Room!
+            </button>
 
-          <button type="submit">Join</button>
-        </form>
+            <form onSubmit={this.handleSubmit}>
+              <input
+                name="channel"
+                value={this.state.channel}
+                onChange={this.handleChange}
+                placeholder="channel"
+              />
+
+              <button type="submit">Join</button>
+            </form>
+          </>
+        ) : null}
 
         <div>{rooms ? rooms.map((x, i) => <p key={i}>{x}</p>) : null}</div>
       </div>
@@ -76,7 +88,7 @@ const mapState = (state) => ({
 });
 
 const mapDispatch = (dispatch) => ({
-  addChannel: (channel) => dispatch(addChannel(channel)),
+  addNewChannel: (channel, name) => dispatch(addNewChannel(channel, name)),
 });
 
 export default connect(mapState, mapDispatch)(Home);

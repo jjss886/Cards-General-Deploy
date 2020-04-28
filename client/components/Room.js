@@ -7,7 +7,7 @@ const Room = ({ location, history }) => {
 
   return (
     <div className="mainDiv">
-      <h3>Welcome to room: {channel}!</h3>
+      <h3>Welcome to room: {channel}</h3>
 
       <button type="button" onClick={history.goBack}>
         Back

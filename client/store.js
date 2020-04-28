@@ -4,11 +4,13 @@ import socket from "./utils/socket";
 
 // ---------------- INITIAL STATE ----------------
 const initialState = { channels: {} };
-const channelObj = {
+const initialChannel = {
   players: [],
   deck: [],
 };
-const playerObj = {
+const initialPlayer = {
+  id: "",
+  name: "",
   hand: [],
 };
 
@@ -16,10 +18,20 @@ const playerObj = {
 const ADD_CHANNEL = "ADD_CHANNEL";
 
 // ---------------- ACTION CREATORS ----------------
-export const addChannel = (channel) => ({
-  type: ADD_CHANNEL,
-  channel,
-});
+export const addNewChannel = (channel, name) => {
+  const playerObj = { ...initialPlayer };
+  playerObj.id = 1;
+  playerObj.name = name;
+
+  const channelObj = { ...initialChannel };
+  channelObj.players.push(playerObj);
+
+  return {
+    type: ADD_CHANNEL,
+    channel,
+    channelObj,
+  };
+};
 
 // ---------------- REDUCER ----------------
 const reducer = (state = initialState, action) => {
@@ -27,8 +39,7 @@ const reducer = (state = initialState, action) => {
     case ADD_CHANNEL:
       return {
         ...state,
-        // channels: [...state.channels, action.channel],
-        channels: { ...state.channels, [action.channel]: channelObj },
+        channels: { ...state.channels, [action.channel]: action.channelObj },
       };
     default:
       return state;
