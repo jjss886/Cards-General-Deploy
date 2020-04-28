@@ -22,6 +22,9 @@ const createApp = () => {
   // COMPRESSION MIDDLEWARE
   app.use(compression());
 
+  // ROUTING
+  app.use("/api", require("./api"));
+
   // STATIC FILE-SERVING MIDDLEWARE
   app.use(express.static(path.join(__dirname, "../public")));
 
