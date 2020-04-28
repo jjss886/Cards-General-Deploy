@@ -13,13 +13,5 @@ module.exports = (io) => {
       socket.broadcast.emit("new-room", room);
       // io.emit("new-room", room);
     });
-
-    // socket.on('new-message', message => {
-    //   socket.broadcast.emit('new-message', message);
-    // });
-
-    // socket.on('new-channel', channel => {
-    //   socket.broadcast.emit('new-channel', channel);
-    // });
   });
 };

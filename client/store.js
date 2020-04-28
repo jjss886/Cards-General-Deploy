@@ -5,6 +5,7 @@ import socket from "./utils/socket";
 // ---------------- INITIAL STATE ----------------
 const initialState = { room: "", players: [], deck: [], table: [] };
 const initialChannel = {
+  room: "",
   players: [],
   deck: [],
   table: [],

@@ -54,13 +54,13 @@ class Home extends Component {
   joinRoom = (evt) => {
     evt.preventDefault();
 
-    const { channel, name } = this.state,
+    const { channel, name, rooms } = this.state,
       { channels, history, addNewPlayer } = this.props;
 
     if (!name.length) return alert("Please fill in name");
 
-    if (channel in channels) {
-      addNewPlayer(channel, name);
+    if (channel in rooms) {
+      // addNewPlayer(channel, name);
 
       history.push({
         pathname: `/Room/${channel}`,

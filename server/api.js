@@ -2,8 +2,16 @@ const router = require("express").Router();
 // const socket = require("./socket");
 module.exports = router;
 
+// ------------------- VARIABLE SETUP -------------------
 const roomObj = { ABCD: true, XYWZ: true };
+const initialChannel = {
+  room: "",
+  players: [],
+  deck: [],
+  table: [],
+};
 
+// ------------------- ROUTES -------------------
 router.get("/all-rooms", (req, res, next) => {
   try {
     // res.json(Object.keys(roomObj));
