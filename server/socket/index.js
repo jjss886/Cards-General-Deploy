@@ -8,6 +8,12 @@ module.exports = (io) => {
       console.log(`Connection ${socket.id} has left the building`);
     });
 
+    socket.on("new-room", (room) => {
+      console.log("NEW room socket -", room);
+      socket.broadcast.emit("new-room", room);
+      // io.emit("new-room", room);
+    });
+
     // socket.on('new-message', message => {
     //   socket.broadcast.emit('new-message', message);
     // });

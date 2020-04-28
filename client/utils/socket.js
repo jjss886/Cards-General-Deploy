@@ -6,6 +6,11 @@ const socket = io(window.location.origin);
 socket.on("connect", () => {
   console.log("I am now connected to the server!");
 
+  socket.on("new-room", (room) => {
+    console.log("NEW room socket -", room);
+    // socket.broadcast.emit("new-room", room);
+  });
+
   // socket.on("new-message", (message) => {
   //   store.dispatch(gotNewMessages(message));
   // });

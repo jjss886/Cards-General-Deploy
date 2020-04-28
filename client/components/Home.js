@@ -3,11 +3,12 @@ import { connect } from "react-redux";
 import axios from "axios";
 import { addNewChannel, addNewPlayer } from "../store";
 import { channelOption } from "../utils/utilities";
+import socket from "../utils/socket";
 
 class Home extends Component {
   constructor() {
     super();
-    this.state = { rooms: [], channel: "", name: "" };
+    this.state = { rooms: {}, channel: "", name: "" };
   }
 
   async componentDidMount() {
@@ -15,9 +16,9 @@ class Home extends Component {
     this.setState({ rooms });
   }
 
-  roomCreate = () => {
-    const { channels, addNewChannel, history } = this.props,
-      { name } = this.state;
+  roomCreate = async () => {
+    const { addNewChannel, history } = this.props,
+      { name, rooms } = this.state;
 
     if (!name.length) return alert("Please fill in name");
 
@@ -29,8 +30,12 @@ class Home extends Component {
         channel += channelOption[x];
       }
 
-      if (!(channel in channels)) {
+      if (!(channel in rooms)) {
         addNewChannel(channel, name);
+
+        await axios.post("/new-room", { channel });
+
+        socket.emit("new-room", channel);
 
         history.push({
           pathname: `/Room/${channel}`,
@@ -67,7 +72,8 @@ class Home extends Component {
   };
 
   render() {
-    const { rooms } = this.props;
+    const { rooms } = this.state,
+      roomIds = Object.keys(rooms);
     console.log("state render -", this.state);
 
     return (
@@ -98,7 +104,7 @@ class Home extends Component {
           </button>
         </form>
 
-        <div>{rooms ? rooms.map((x, i) => <p key={i}>{x}</p>) : null}</div>
+        <div>{roomIds ? roomIds.map((x, i) => <p key={i}>{x}</p>) : null}</div>
       </div>
     );
   }
@@ -106,7 +112,6 @@ class Home extends Component {
 
 const mapState = (state) => ({
   channels: state.channels,
-  rooms: Object.keys(state.channels),
 });
 
 const mapDispatch = (dispatch) => ({

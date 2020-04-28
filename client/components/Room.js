@@ -6,7 +6,6 @@ class Room extends Component {
     const { channels, location, history } = this.props,
       { room } = location.state,
       channel = channels[room];
-    console.log("room render -", location.state, channel);
 
     return (
       <div className="mainDiv">
