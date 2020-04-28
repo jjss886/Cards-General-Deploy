@@ -1,5 +1,4 @@
 const router = require("express").Router();
-
 module.exports = router;
 
 const roomObj = { ABCD: "test", XYWZ: "test" };

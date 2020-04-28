@@ -11,7 +11,7 @@ class Home extends Component {
   }
 
   async componentDidMount() {
-    const { data: rooms } = await axios.get("/api/all-rooms");
+    const { data: rooms } = await axios.get("/all-rooms");
     this.setState({ rooms });
   }
 
