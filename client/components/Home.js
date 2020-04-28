@@ -1,12 +1,18 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import axios from "axios";
 import { addNewChannel, addNewPlayer } from "../store";
 import { channelOption } from "../utils/utilities";
 
 class Home extends Component {
   constructor() {
     super();
-    this.state = { channel: "", name: "" };
+    this.state = { rooms: [], channel: "", name: "" };
+  }
+
+  async componentDidMount() {
+    const { data: rooms } = await axios.get("/api/all-rooms");
+    this.setState({ rooms });
   }
 
   roomCreate = () => {
@@ -62,6 +68,7 @@ class Home extends Component {
 
   render() {
     const { rooms } = this.props;
+    console.log("state render -", this.state);
 
     return (
       <div className="houseDiv mainDiv">
