@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { addNewChannel } from "../store";
+import { addNewChannel, addNewPlayer } from "../store";
 import { channelOption } from "../utils/utilities";
 
 class Home extends Component {
@@ -10,19 +10,27 @@ class Home extends Component {
   }
 
   roomCreate = () => {
-    const { channels, addNewChannel, history } = this.props;
+    const { channels, addNewChannel, history } = this.props,
+      { name } = this.state;
+
+    if (!name.length) return alert("Please fill in name");
 
     while (true) {
-      let str = "";
+      let channel = "";
 
       for (let i = 0; i < 4; i++) {
         const x = Math.floor(Math.random() * channelOption.length);
-        str += channelOption[x];
+        channel += channelOption[x];
       }
 
-      if (!(str in channels)) {
-        addNewChannel(str, this.state.name);
-        history.push({ pathname: `/Room/${str}`, state: { channel: str } });
+      if (!(channel in channels)) {
+        addNewChannel(channel, name);
+
+        history.push({
+          pathname: `/Room/${channel}`,
+          state: { room: channel, name },
+        });
+
         return;
       }
     }
@@ -32,13 +40,22 @@ class Home extends Component {
     this.setState({ [evt.target.name]: evt.target.value });
   };
 
-  handleSubmit = (evt) => {
+  joinRoom = (evt) => {
     evt.preventDefault();
+
     const { channel, name } = this.state,
-      { channels, history } = this.props;
+      { channels, history, addNewPlayer } = this.props;
+
+    if (!name.length) return alert("Please fill in name");
 
     if (channel in channels) {
-      history.push({ pathname: `/Room/${channel}`, state: { channel, name } });
+      addNewPlayer(channel, name);
+
+      history.push({
+        pathname: `/Room/${channel}`,
+        state: { room: channel, name },
+      });
+
       this.setState({ channel: "" });
     } else alert("Room Not Available");
   };
@@ -57,24 +74,20 @@ class Home extends Component {
           placeholder="name"
         />
 
-        {this.state.name.length ? (
-          <>
-            <button type="button" onClick={this.roomCreate}>
-              Create Room!
-            </button>
+        <button type="button" onClick={this.roomCreate}>
+          Create Room!
+        </button>
 
-            <form onSubmit={this.handleSubmit}>
-              <input
-                name="channel"
-                value={this.state.channel}
-                onChange={this.handleChange}
-                placeholder="channel"
-              />
+        <form onSubmit={this.joinRoom}>
+          <input
+            name="channel"
+            value={this.state.channel}
+            onChange={this.handleChange}
+            placeholder="channel"
+          />
 
-              <button type="submit">Join</button>
-            </form>
-          </>
-        ) : null}
+          <button type="submit">Join</button>
+        </form>
 
         <div>{rooms ? rooms.map((x, i) => <p key={i}>{x}</p>) : null}</div>
       </div>
@@ -89,6 +102,7 @@ const mapState = (state) => ({
 
 const mapDispatch = (dispatch) => ({
   addNewChannel: (channel, name) => dispatch(addNewChannel(channel, name)),
+  addNewPlayer: (channel, name) => dispatch(addNewPlayer(channel, name)),
 });
 
 export default connect(mapState, mapDispatch)(Home);
