@@ -26,7 +26,7 @@ export const newChannelFn = (name) => {
 
 // ---------------- ACTION TYPES ----------------
 const ADD_ROOM = "ADD_ROOM";
-const ADD_CHANNEL = "ADD_CHANNEL";
+const SET_CHANNEL = "SET_CHANNEL";
 const ADD_PLAYER = "ADD_PLAYER";
 
 // ---------------- ACTION CREATORS ----------------

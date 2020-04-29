@@ -8,7 +8,7 @@ import socket from "../utils/socket";
 class Home extends Component {
   constructor() {
     super();
-    this.state = { channel: "", name: "" };
+    this.state = { roomId: "", name: "" };
   }
 
   async componentDidMount() {
@@ -23,21 +23,23 @@ class Home extends Component {
     if (!name.length) return alert("Please fill in name");
 
     while (true) {
-      let channel = "";
+      let roomId = "";
 
       for (let i = 0; i < 4; i++) {
         const x = Math.floor(Math.random() * channelOption.length);
-        channel += channelOption[x];
+        roomId += channelOption[x];
       }
 
-      if (!(channel in rooms)) {
-        await axios.post("/new-room", { channel });
+      if (!(roomId in rooms)) {
+        await axios.post("/new-room", {
+          action: { type: "NEW_ROOM", roomId, name },
+        });
 
-        socket.emit("new-room", channel);
+        socket.emit("new-room", roomId);
 
         history.push({
-          pathname: `/Room/${channel}`,
-          state: { room: channel, name },
+          pathname: `/Room/${roomId}`,
+          state: { room: roomId, name },
         });
 
         return;
@@ -52,18 +54,18 @@ class Home extends Component {
   joinRoom = (evt) => {
     evt.preventDefault();
 
-    const { channel, name } = this.state,
+    const { roomId, name } = this.state,
       { history, rooms } = this.props;
 
     if (!name.length) return alert("Please fill in name");
 
-    if (channel in rooms) {
+    if (roomId in rooms) {
       history.push({
-        pathname: `/Room/${channel}`,
-        state: { room: channel, name },
+        pathname: `/Room/${roomId}`,
+        state: { room: roomId, name },
       });
 
-      this.setState({ channel: "" });
+      this.setState({ roomId: "" });
     } else alert("Room Not Available");
   };
 
@@ -79,7 +81,7 @@ class Home extends Component {
           name="name"
           value={this.state.name}
           onChange={this.handleChange}
-          placeholder="name"
+          placeholder="Name"
         />
 
         <button type="button" className="gBtn" onClick={this.roomCreate}>
@@ -88,10 +90,10 @@ class Home extends Component {
 
         <form onSubmit={this.joinRoom}>
           <input
-            name="channel"
-            value={this.state.channel}
+            name="roomId"
+            value={this.state.roomId}
             onChange={this.handleChange}
-            placeholder="channel"
+            placeholder="Room Id"
           />
 
           <button type="submit" className="gBtn">
