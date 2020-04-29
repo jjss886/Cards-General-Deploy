@@ -37,10 +37,7 @@ class Home extends Component {
 
         socket.emit("new-room", roomId);
 
-        history.push({
-          pathname: `/Room/${roomId}`,
-          state: { room: roomId, name },
-        });
+        history.push(`/Room/${roomId}`);
 
         return;
       }
@@ -59,14 +56,8 @@ class Home extends Component {
 
     if (!name.length) return alert("Please fill in name");
 
-    if (roomId in rooms) {
-      history.push({
-        pathname: `/Room/${roomId}`,
-        state: { room: roomId, name },
-      });
-
-      this.setState({ roomId: "" });
-    } else alert("Room Not Available");
+    if (roomId in rooms) history.push(`/Room/${roomId}`);
+    else alert("Room Not Available");
   };
 
   render() {

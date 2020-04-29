@@ -5,7 +5,7 @@ import { createLogger } from "redux-logger";
 const initialState = { rooms: {}, channel: initialChannel };
 const initialChannel = {
   room: "",
-  players: [],
+  players: {},
   deck: [],
   table: [],
 };
@@ -17,12 +17,6 @@ const initialPlayer = (id, name) => ({
 });
 
 // ---------------- HELPERS ----------------
-export const newChannelFn = (name) => {
-  const channelObj = { ...initialChannel };
-  channelObj.players = [initialPlayer(1, name)];
-
-  return channelObj;
-};
 
 // ---------------- ACTION TYPES ----------------
 const ADD_ROOM = "ADD_ROOM";

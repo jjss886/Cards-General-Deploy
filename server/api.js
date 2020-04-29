@@ -4,7 +4,7 @@ module.exports = router;
 // ------------------- VARIABLE SETUP -------------------
 const initialChannel = (room, id, name) => ({
   room,
-  players: [initialPlayer(id, name)],
+  players: { id: initialPlayer(id, name) },
   deck: [],
   table: [],
 });

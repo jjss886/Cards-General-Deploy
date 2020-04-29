@@ -3,12 +3,13 @@ import { connect } from "react-redux";
 
 class Room extends Component {
   render() {
-    const { location, history } = this.props,
-      { room } = location.state;
+    const { location, history } = this.props;
+    // { room } = location.state;
 
     return (
       <div className="mainDiv">
-        <h3>Welcome to room: {room}</h3>
+        {/* <h3>Welcome to room: {room}</h3> */}
+        <h3>Welcome to room: </h3>
 
         <button type="button" onClick={history.goBack} className="gBtn">
           Back
