@@ -2,28 +2,45 @@ const router = require("express").Router();
 module.exports = router;
 
 // ------------------- VARIABLE SETUP -------------------
-const initialChannel = (room) => ({
+const initialChannel = (room, id, name) => ({
   room,
-  players: [],
+  players: { [id]: initialPlayer(id, name) },
   deck: [],
   table: [],
 });
-const roomObj = { ABCD: initialChannel("ABCD"), XYWZ: initialChannel("XYWZ") };
+const initialPlayer = (id, name) => ({
+  id,
+  name,
+  hand: [],
+  points: 0,
+});
+const roomObj = {
+  ABCD: initialChannel("ABCD", 1, "Bob"),
+};
+
+// ------------------- HELPER -------------------
+const updateRoom = (roomId, action) => {
+  switch (action.type) {
+    case "NEW_ROOM":
+      roomObj[roomId] = initialChannel(roomId, 1, action.name);
+    default:
+      break;
+  }
+};
 
 // ------------------- ROUTES -------------------
 router.get("/all-rooms", (req, res, next) => {
   try {
-    res.json(roomObj);
+    res.json(Object.keys(roomObj));
   } catch (error) {
     next(error);
   }
 });
 
-router.post("/new-room", (req, res, next) => {
+router.post("/room-action", (req, res, next) => {
   try {
-    const { channel } = req.body;
-
-    roomObj[channel] = initialChannel(channel);
+    const { action } = req.body;
+    updateRoom(action.roomId, action);
 
     res.sendStatus(201);
   } catch (error) {

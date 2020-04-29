@@ -1,15 +1,14 @@
 import { createStore, applyMiddleware, compose } from "redux";
 import { createLogger } from "redux-logger";
-import socket from "./utils/socket";
 
 // ---------------- INITIAL STATE ----------------
-const initialState = { room: "", players: [], deck: [], table: [] };
-const initialChannel = {
-  room: "",
-  players: [],
+const initialState = { rooms: new Set(), channel: {} };
+const initialChannel = (room, id, name) => ({
+  room,
+  players: { [id]: initialPlayer(id, name) },
   deck: [],
   table: [],
-};
+});
 const initialPlayer = (id, name) => ({
   id,
   name,
@@ -17,54 +16,47 @@ const initialPlayer = (id, name) => ({
   points: 0,
 });
 
-// ---------------- HELPERS ----------------
-export const newChannelFn = (name) => {
-  const channelObj = { ...initialChannel };
-  channelObj.players = [initialPlayer(1, name)];
-
-  return channelObj;
-};
-
 // ---------------- ACTION TYPES ----------------
-const ADD_CHANNEL = "ADD_CHANNEL";
-const ADD_PLAYER = "ADD_PLAYER";
+const GET_ALL_ROOMS = "GET_ALL_ROOMS";
+const ADD_NEW_ROOM = "ADD_NEW_ROOM";
+const JOIN_ROOM = "JOIN_ROOM";
 
 // ---------------- ACTION CREATORS ----------------
-export const addNewChannel = (channel, name) => ({
-  type: ADD_CHANNEL,
-  channel,
-  channelObj: newChannelFn(name),
+export const getAllRooms = (rooms) => ({
+  type: GET_ALL_ROOMS,
+  rooms,
 });
-
-export const addNewPlayer = (channel, name) => ({
-  type: ADD_PLAYER,
-  channel,
+export const addNewRoom = ({ roomId, id, name }) => ({
+  type: ADD_NEW_ROOM,
+  roomId,
+  id,
+  name,
+});
+export const joinRoom = ({ roomId, id, name }) => ({
+  type: JOIN_ROOM,
+  roomId,
+  id,
   name,
 });
 
 // ---------------- REDUCER ----------------
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case ADD_CHANNEL:
+    case GET_ALL_ROOMS:
       return {
         ...state,
-        channels: { ...state.channels, [action.channel]: action.channelObj },
+        rooms: action.rooms,
       };
-    case ADD_PLAYER:
-      const room = action.channel,
-        channelObj = { ...state.channels[room] };
-
-      channelObj.players = [
-        ...channelObj.players,
-        initialPlayer(channelObj.players.length + 1, action.name),
-      ];
-
+    case ADD_NEW_ROOM:
       return {
         ...state,
-        channels: {
-          ...state.channels,
-          [room]: channelObj,
-        },
+        rooms: new Set(state.rooms).add(action.roomId),
+        channel: initialChannel(action.roomId, action.id, action.name),
+      };
+    case JOIN_ROOM:
+      return {
+        ...state,
+        channel: initialChannel(action.roomId, action.id, action.name),
       };
     default:
       return state;
