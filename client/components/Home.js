@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import axios from "axios";
-import { addNewRoom } from "../store";
+import { getAllRooms, addNewRoom } from "../store";
 import { channelOption } from "../utils/utilities";
 import socket from "../utils/socket";
 
@@ -13,7 +13,7 @@ class Home extends Component {
 
   async componentDidMount() {
     const { data: rooms } = await axios.get("/all-rooms");
-    this.props.addNewRoom(rooms);
+    this.props.getAllRooms(new Set(rooms));
   }
 
   roomCreate = async () => {
@@ -30,12 +30,12 @@ class Home extends Component {
         roomId += channelOption[x];
       }
 
-      if (!(roomId in rooms)) {
-        await axios.post("/room-action", {
-          action: { type: "NEW_ROOM", roomId, name },
-        });
+      if (!rooms.has(roomId)) {
+        const roomObj = { type: "NEW_ROOM", roomId, id: 1, name };
 
-        socket.emit("new-room", roomId);
+        await axios.post("/room-action", { action: roomObj });
+
+        socket.emit("new-room", roomObj);
 
         history.push(`/Room/${roomId}`);
 
@@ -56,13 +56,14 @@ class Home extends Component {
 
     if (!name.length) return alert("Please fill in name");
 
-    if (roomId in rooms) history.push(`/Room/${roomId}`);
-    else alert("Room Not Available");
+    if (rooms.has(roomId)) {
+      history.push(`/Room/${roomId}`);
+    } else alert("Room Not Available");
   };
 
   render() {
     const { rooms } = this.props,
-      roomIds = Object.keys(rooms);
+      roomIds = [...rooms.values()];
 
     return (
       <div className="houseDiv mainDiv">
@@ -101,7 +102,8 @@ class Home extends Component {
 const mapState = (state) => ({ rooms: state.rooms });
 
 const mapDispatch = (dispatch) => ({
-  addNewRoom: (room) => dispatch(addNewRoom(room)),
+  getAllRooms: (rooms) => dispatch(getAllRooms(rooms)),
+  addNewRoom: (roomObj) => dispatch(addNewRoom(roomObj)),
 });
 
 export default connect(mapState, mapDispatch)(Home);

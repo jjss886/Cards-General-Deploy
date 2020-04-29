@@ -6,10 +6,8 @@ module.exports = (io) => {
       console.log(`${socket.id} socket left`);
     });
 
-    socket.on("new-room", (room) => {
-      console.log("SERVER room socket -", room);
-
-      socket.broadcast.emit("new-room", room);
+    socket.on("new-room", (roomObj) => {
+      io.emit("new-room", roomObj);
     });
   });
 };

@@ -3,28 +3,27 @@ import { connect } from "react-redux";
 
 class Room extends Component {
   render() {
-    const { location, history } = this.props;
-    // { room } = location.state;
+    const { channel, history } = this.props,
+      players = channel.players ? Object.values(channel.players) : [];
 
     return (
       <div className="mainDiv">
-        {/* <h3>Welcome to room: {room}</h3> */}
-        <h3>Welcome to room: </h3>
+        <h3>Welcome to room: {channel.room}</h3>
 
         <button type="button" onClick={history.goBack} className="gBtn">
           Back
         </button>
 
-        {/* {channel.players.map((x, i) => (
+        {players.map((x, i) => (
           <p key={i}>
             {x.id}. {x.name}
           </p>
-        ))} */}
+        ))}
       </div>
     );
   }
 }
 
-const mapState = (state) => ({});
+const mapState = (state) => ({ rooms: state.rooms, channel: state.channel });
 
 export default connect(mapState)(Room);

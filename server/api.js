@@ -4,7 +4,7 @@ module.exports = router;
 // ------------------- VARIABLE SETUP -------------------
 const initialChannel = (room, id, name) => ({
   room,
-  players: { id: initialPlayer(id, name) },
+  players: { [id]: initialPlayer(id, name) },
   deck: [],
   table: [],
 });
@@ -14,7 +14,9 @@ const initialPlayer = (id, name) => ({
   hand: [],
   points: 0,
 });
-const roomObj = { ABCD: initialChannel("ABCD"), XYWZ: initialChannel("XYWZ") };
+const roomObj = {
+  ABCD: initialChannel("ABCD", 1, "Bob"),
+};
 
 // ------------------- HELPER -------------------
 const updateRoom = (roomId, action) => {
@@ -29,7 +31,7 @@ const updateRoom = (roomId, action) => {
 // ------------------- ROUTES -------------------
 router.get("/all-rooms", (req, res, next) => {
   try {
-    res.json(roomObj);
+    res.json(Object.keys(roomObj));
   } catch (error) {
     next(error);
   }

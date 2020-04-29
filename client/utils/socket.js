@@ -8,10 +8,8 @@ socket.on("connect", () => {
 
   const { dispatch, getState } = store;
 
-  socket.on("new-room", (room) => {
-    console.log("CLIENT room socket -", room);
-
-    dispatch(addNewRoom({ [room]: true }));
+  socket.on("new-room", (roomObj) => {
+    dispatch(addNewRoom(roomObj));
   });
 });
 
