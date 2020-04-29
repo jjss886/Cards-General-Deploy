@@ -1,9 +1,8 @@
 import { createStore, applyMiddleware, compose } from "redux";
 import { createLogger } from "redux-logger";
-import socket from "./utils/socket";
 
 // ---------------- INITIAL STATE ----------------
-const initialState = { room: "", players: [], deck: [], table: [] };
+const initialState = { rooms: {}, channel: initialChannel };
 const initialChannel = {
   room: "",
   players: [],
@@ -26,45 +25,23 @@ export const newChannelFn = (name) => {
 };
 
 // ---------------- ACTION TYPES ----------------
+const ADD_ROOM = "ADD_ROOM";
 const ADD_CHANNEL = "ADD_CHANNEL";
 const ADD_PLAYER = "ADD_PLAYER";
 
 // ---------------- ACTION CREATORS ----------------
-export const addNewChannel = (channel, name) => ({
-  type: ADD_CHANNEL,
-  channel,
-  channelObj: newChannelFn(name),
-});
-
-export const addNewPlayer = (channel, name) => ({
-  type: ADD_PLAYER,
-  channel,
-  name,
+export const addNewRoom = (room) => ({
+  type: ADD_ROOM,
+  room,
 });
 
 // ---------------- REDUCER ----------------
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case ADD_CHANNEL:
+    case ADD_ROOM:
       return {
         ...state,
-        channels: { ...state.channels, [action.channel]: action.channelObj },
-      };
-    case ADD_PLAYER:
-      const room = action.channel,
-        channelObj = { ...state.channels[room] };
-
-      channelObj.players = [
-        ...channelObj.players,
-        initialPlayer(channelObj.players.length + 1, action.name),
-      ];
-
-      return {
-        ...state,
-        channels: {
-          ...state.channels,
-          [room]: channelObj,
-        },
+        rooms: { ...state.rooms, ...action.room },
       };
     default:
       return state;

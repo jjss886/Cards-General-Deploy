@@ -7,9 +7,9 @@ module.exports = (io) => {
     });
 
     socket.on("new-room", (room) => {
-      console.log("NEW room socket -", room);
+      console.log("SERVER room socket -", room);
+
       socket.broadcast.emit("new-room", room);
-      // io.emit("new-room", room);
     });
   });
 };

@@ -1,24 +1,24 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import axios from "axios";
-import { addNewChannel, addNewPlayer } from "../store";
+import { addNewRoom } from "../store";
 import { channelOption } from "../utils/utilities";
 import socket from "../utils/socket";
 
 class Home extends Component {
   constructor() {
     super();
-    this.state = { rooms: {}, channel: "", name: "" };
+    this.state = { channel: "", name: "" };
   }
 
   async componentDidMount() {
     const { data: rooms } = await axios.get("/all-rooms");
-    this.setState({ rooms });
+    this.props.addNewRoom(rooms);
   }
 
   roomCreate = async () => {
-    const { addNewChannel, history } = this.props,
-      { name, rooms } = this.state;
+    const { history, rooms } = this.props,
+      { name } = this.state;
 
     if (!name.length) return alert("Please fill in name");
 
@@ -31,8 +31,6 @@ class Home extends Component {
       }
 
       if (!(channel in rooms)) {
-        addNewChannel(channel, name);
-
         await axios.post("/new-room", { channel });
 
         socket.emit("new-room", channel);
@@ -54,14 +52,12 @@ class Home extends Component {
   joinRoom = (evt) => {
     evt.preventDefault();
 
-    const { channel, name, rooms } = this.state,
-      { channels, history, addNewPlayer } = this.props;
+    const { channel, name } = this.state,
+      { history, rooms } = this.props;
 
     if (!name.length) return alert("Please fill in name");
 
     if (channel in rooms) {
-      // addNewPlayer(channel, name);
-
       history.push({
         pathname: `/Room/${channel}`,
         state: { room: channel, name },
@@ -72,9 +68,8 @@ class Home extends Component {
   };
 
   render() {
-    const { rooms } = this.state,
+    const { rooms } = this.props,
       roomIds = Object.keys(rooms);
-    console.log("state render -", this.state);
 
     return (
       <div className="houseDiv mainDiv">
@@ -110,13 +105,10 @@ class Home extends Component {
   }
 }
 
-const mapState = (state) => ({
-  channels: state.channels,
-});
+const mapState = (state) => ({ rooms: state.rooms });
 
 const mapDispatch = (dispatch) => ({
-  addNewChannel: (channel, name) => dispatch(addNewChannel(channel, name)),
-  addNewPlayer: (channel, name) => dispatch(addNewPlayer(channel, name)),
+  addNewRoom: (room) => dispatch(addNewRoom(room)),
 });
 
 export default connect(mapState, mapDispatch)(Home);

@@ -3,9 +3,8 @@ import { connect } from "react-redux";
 
 class Room extends Component {
   render() {
-    const { channels, location, history } = this.props,
+    const { location, history } = this.props,
       { room } = location.state;
-    // channel = channels[room];
 
     return (
       <div className="mainDiv">
@@ -25,8 +24,6 @@ class Room extends Component {
   }
 }
 
-const mapState = (state) => ({
-  channels: state.channels,
-});
+const mapState = (state) => ({});
 
 export default connect(mapState)(Room);
