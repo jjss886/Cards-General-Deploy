@@ -17,7 +17,7 @@ class Home extends Component {
   }
 
   roomCreate = async () => {
-    const { history, rooms } = this.props,
+    const { history, rooms, addNewRoom } = this.props,
       { name } = this.state;
 
     if (!name.length) return alert("Please fill in name");
@@ -35,6 +35,8 @@ class Home extends Component {
 
         await axios.post("/room-action", { action: roomObj });
 
+        addNewRoom(roomObj);
+
         socket.emit("new-room", roomObj);
 
         history.push(`/Room/${roomId}`);
@@ -48,7 +50,7 @@ class Home extends Component {
     this.setState({ [evt.target.name]: evt.target.value });
   };
 
-  joinRoom = (evt) => {
+  handleSubmit = (evt) => {
     evt.preventDefault();
 
     const { roomId, name } = this.state,
@@ -57,6 +59,7 @@ class Home extends Component {
     if (!name.length) return alert("Please fill in name");
 
     if (rooms.has(roomId)) {
+      // NEED TO SET CHANNEL AND UPDATE STATE HERE BESIDES JUST REDIRECTING
       history.push(`/Room/${roomId}`);
     } else alert("Room Not Available");
   };
@@ -80,7 +83,7 @@ class Home extends Component {
           Create Room!
         </button>
 
-        <form onSubmit={this.joinRoom}>
+        <form onSubmit={this.handleSubmit}>
           <input
             name="roomId"
             value={this.state.roomId}

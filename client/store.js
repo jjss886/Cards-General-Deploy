@@ -16,28 +16,28 @@ const initialPlayer = (id, name) => ({
   points: 0,
 });
 
-// ---------------- HELPERS ----------------
-
 // ---------------- ACTION TYPES ----------------
 const GET_ALL_ROOMS = "GET_ALL_ROOMS";
 const ADD_NEW_ROOM = "ADD_NEW_ROOM";
-const SET_CHANNEL = "SET_CHANNEL";
-const ADD_PLAYER = "ADD_PLAYER";
+const JOIN_ROOM = "JOIN_ROOM";
 
 // ---------------- ACTION CREATORS ----------------
 export const getAllRooms = (rooms) => ({
   type: GET_ALL_ROOMS,
   rooms,
 });
-export const addNewRoom = ({ roomId, id, name }) => {
-  console.log("add new room redux -", { roomId, id, name });
-  return {
-    type: ADD_NEW_ROOM,
-    roomId,
-    id,
-    name,
-  };
-};
+export const addNewRoom = ({ roomId, id, name }) => ({
+  type: ADD_NEW_ROOM,
+  roomId,
+  id,
+  name,
+});
+export const joinRoom = ({ roomId, id, name }) => ({
+  type: JOIN_ROOM,
+  roomId,
+  id,
+  name,
+});
 
 // ---------------- REDUCER ----------------
 const reducer = (state = initialState, action) => {
@@ -51,6 +51,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         rooms: new Set(state.rooms).add(action.roomId),
+        channel: initialChannel(action.roomId, action.id, action.name),
+      };
+    case JOIN_ROOM:
+      return {
+        ...state,
         channel: initialChannel(action.roomId, action.id, action.name),
       };
     default:

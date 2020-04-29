@@ -7,7 +7,8 @@ module.exports = (io) => {
     });
 
     socket.on("new-room", (roomObj) => {
-      io.emit("new-room", roomObj);
+      socket.broadcast.emit("new-room", roomObj);
+      // io.emit("new-room", roomObj);
     });
   });
 };
