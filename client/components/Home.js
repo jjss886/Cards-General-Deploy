@@ -1,17 +1,24 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import axios from "axios";
 import { addNewChannel, addNewPlayer } from "../store";
 import { channelOption } from "../utils/utilities";
+import socket from "../utils/socket";
 
 class Home extends Component {
   constructor() {
     super();
-    this.state = { channel: "", name: "" };
+    this.state = { rooms: {}, channel: "", name: "" };
   }
 
-  roomCreate = () => {
-    const { channels, addNewChannel, history } = this.props,
-      { name } = this.state;
+  async componentDidMount() {
+    const { data: rooms } = await axios.get("/all-rooms");
+    this.setState({ rooms });
+  }
+
+  roomCreate = async () => {
+    const { addNewChannel, history } = this.props,
+      { name, rooms } = this.state;
 
     if (!name.length) return alert("Please fill in name");
 
@@ -23,8 +30,12 @@ class Home extends Component {
         channel += channelOption[x];
       }
 
-      if (!(channel in channels)) {
+      if (!(channel in rooms)) {
         addNewChannel(channel, name);
+
+        await axios.post("/new-room", { channel });
+
+        socket.emit("new-room", channel);
 
         history.push({
           pathname: `/Room/${channel}`,
@@ -43,13 +54,13 @@ class Home extends Component {
   joinRoom = (evt) => {
     evt.preventDefault();
 
-    const { channel, name } = this.state,
+    const { channel, name, rooms } = this.state,
       { channels, history, addNewPlayer } = this.props;
 
     if (!name.length) return alert("Please fill in name");
 
-    if (channel in channels) {
-      addNewPlayer(channel, name);
+    if (channel in rooms) {
+      // addNewPlayer(channel, name);
 
       history.push({
         pathname: `/Room/${channel}`,
@@ -61,7 +72,9 @@ class Home extends Component {
   };
 
   render() {
-    const { rooms } = this.props;
+    const { rooms } = this.state,
+      roomIds = Object.keys(rooms);
+    console.log("state render -", this.state);
 
     return (
       <div className="houseDiv mainDiv">
@@ -91,7 +104,7 @@ class Home extends Component {
           </button>
         </form>
 
-        <div>{rooms ? rooms.map((x, i) => <p key={i}>{x}</p>) : null}</div>
+        <div>{roomIds ? roomIds.map((x, i) => <p key={i}>{x}</p>) : null}</div>
       </div>
     );
   }
@@ -99,7 +112,6 @@ class Home extends Component {
 
 const mapState = (state) => ({
   channels: state.channels,
-  rooms: Object.keys(state.channels),
 });
 
 const mapDispatch = (dispatch) => ({

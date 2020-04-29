@@ -3,8 +3,9 @@ import { createLogger } from "redux-logger";
 import socket from "./utils/socket";
 
 // ---------------- INITIAL STATE ----------------
-const initialState = { channels: {} };
+const initialState = { room: "", players: [], deck: [], table: [] };
 const initialChannel = {
+  room: "",
   players: [],
   deck: [],
   table: [],

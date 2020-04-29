@@ -4,9 +4,8 @@ import { connect } from "react-redux";
 class Room extends Component {
   render() {
     const { channels, location, history } = this.props,
-      { room } = location.state,
-      channel = channels[room];
-    console.log("room render -", location.state, channel);
+      { room } = location.state;
+    // channel = channels[room];
 
     return (
       <div className="mainDiv">
@@ -16,11 +15,11 @@ class Room extends Component {
           Back
         </button>
 
-        {channel.players.map((x, i) => (
+        {/* {channel.players.map((x, i) => (
           <p key={i}>
             {x.id}. {x.name}
           </p>
-        ))}
+        ))} */}
       </div>
     );
   }
