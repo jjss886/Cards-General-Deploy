@@ -6,18 +6,13 @@ const socket = io(window.location.origin);
 socket.on("connect", () => {
   console.log("I am now connected to the server!");
 
+  const { dispatch, getState } = store;
+
   socket.on("new-room", (room) => {
     console.log("NEW room socket -", room);
+
     // socket.broadcast.emit("new-room", room);
   });
-
-  // socket.on("new-message", (message) => {
-  //   store.dispatch(gotNewMessages(message));
-  // });
-
-  // socket.on("new-channel", (channel) => {
-  //   store.dispatch(gotNewChannel(channel));
-  // });
 });
 
 export default socket;

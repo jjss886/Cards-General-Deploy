@@ -1,20 +1,18 @@
 const router = require("express").Router();
-// const socket = require("./socket");
 module.exports = router;
 
 // ------------------- VARIABLE SETUP -------------------
-const roomObj = { ABCD: true, XYWZ: true };
-const initialChannel = {
-  room: "",
+const initialChannel = (room) => ({
+  room,
   players: [],
   deck: [],
   table: [],
-};
+});
+const roomObj = { ABCD: initialChannel("ABCD"), XYWZ: initialChannel("XYWZ") };
 
 // ------------------- ROUTES -------------------
 router.get("/all-rooms", (req, res, next) => {
   try {
-    // res.json(Object.keys(roomObj));
     res.json(roomObj);
   } catch (error) {
     next(error);
@@ -23,8 +21,10 @@ router.get("/all-rooms", (req, res, next) => {
 
 router.post("/new-room", (req, res, next) => {
   try {
-    roomObj[req.body.channel] = true;
-    // socket.emit("new-room", roomObj);
+    const { channel } = req.body;
+
+    roomObj[channel] = initialChannel(channel);
+
     res.sendStatus(201);
   } catch (error) {
     next(error);
