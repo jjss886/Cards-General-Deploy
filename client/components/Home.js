@@ -31,7 +31,7 @@ class Home extends Component {
       }
 
       if (!(roomId in rooms)) {
-        await axios.post("/new-room", {
+        await axios.post("/room-action", {
           action: { type: "NEW_ROOM", roomId, name },
         });
 

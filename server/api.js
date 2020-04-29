@@ -35,7 +35,7 @@ router.get("/all-rooms", (req, res, next) => {
   }
 });
 
-router.post("/new-room", (req, res, next) => {
+router.post("/room-action", (req, res, next) => {
   try {
     const { action } = req.body;
     updateRoom(action.roomId, action);
