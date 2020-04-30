@@ -1,4 +1,6 @@
 const router = require("express").Router();
+// const socketio = require("socket.io");
+// const sock = require("./socket");
 module.exports = router;
 
 // ------------------- VARIABLE SETUP -------------------
@@ -32,6 +34,7 @@ const updateRoom = (roomId, action) => {
 router.get("/all-rooms", (req, res, next) => {
   try {
     res.json(Object.keys(roomObj));
+    console.log(require("./socket"));
   } catch (error) {
     next(error);
   }
