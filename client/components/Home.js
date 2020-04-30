@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import axios from "axios";
 import { getAllRooms, addNewRoom } from "../store";
 import { channelOption } from "../utils/utilities";
-import socket from "../utils/socket";
+import socket from "../socket";
 
 class Home extends Component {
   constructor() {
@@ -37,7 +37,7 @@ class Home extends Component {
 
         addNewRoom(roomObj);
 
-        socket.emit("new-room", roomObj);
+        // socket.emit("new-room", roomObj);
 
         history.push(`/Room/${roomId}`);
 

@@ -56,8 +56,9 @@ const startListening = () => {
     console.log(`Listening it up on port ${PORT}`)
   );
 
+  // require("./socket")(io);
   const io = socketio(server);
-  require("./socket")(io);
+  require("./socket").socketFn(io);
 };
 
 // TRIGGER THE START APP / DATABASE FUNCTION
