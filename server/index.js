@@ -23,7 +23,7 @@ const createApp = () => {
   app.use(compression());
 
   // ROUTING
-  app.use("/", require("./api"));
+  app.use("/", require("./api").router);
 
   // STATIC FILE-SERVING MIDDLEWARE
   app.use(express.static(path.join(__dirname, "../public")));
@@ -57,7 +57,8 @@ const startListening = () => {
   );
 
   const io = socketio(server);
-  require("./socket")(io);
+  require("./socket").socketFn(io);
+  require("./api").ioVariable(io);
 };
 
 // TRIGGER THE START APP / DATABASE FUNCTION

@@ -1,5 +1,5 @@
 import io from "socket.io-client";
-import store, { addNewRoom } from "../store";
+import store, { addNewRoom } from "./store";
 
 const socket = io(window.location.origin);
 
@@ -8,7 +8,7 @@ socket.on("connect", () => {
 
   const { dispatch, getState } = store;
 
-  socket.on("new-room", (roomObj) => {
+  socket.on("NEW_ROOM", (roomObj) => {
     dispatch(addNewRoom(roomObj));
   });
 });
