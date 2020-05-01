@@ -33,7 +33,7 @@ const updateRoom = (roomId, action) => {
     default:
       break;
   }
-  broadcast(io, action.type, action);
+  broadcast(io, roomId, action.type, action);
 };
 
 // ------------------- ROUTES -------------------

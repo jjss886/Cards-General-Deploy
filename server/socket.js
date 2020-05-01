@@ -14,10 +14,13 @@ const socketFn = (io) => {
   });
 };
 
-const broadcast = (io, type, object) => {
-  const socket = socketio(io);
+const broadcast = (io, roomId, type, object) => {
+  // const socket = socketio(io);
+  // socket.emit(type, object);
 
-  socket.emit(type, object);
+  io.of(`/${roomId}`).on("connection", (socket) => {
+    socket.emit(type, object);
+  });
 };
 
 module.exports = {
