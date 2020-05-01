@@ -2,9 +2,9 @@ import io from "socket.io-client";
 import store, { addNewRoom } from "./store";
 
 console.log("window -", window.location);
-// const socket = io(window.location.origin);
+const socket = io(window.location.origin);
 // const socket = io("/ABCD");
-const socket = io(window.location.origin + "/Room/ABCD");
+// const socket = io(window.location.origin + "/Room/ABCD");
 // const socket = io(window.location.href);
 
 socket.on("connect", () => {
@@ -17,10 +17,12 @@ socket.on("connect", () => {
     dispatch(addNewRoom(roomObj));
   });
 
-  // socket.emit("JOIN_ROOM", "ABCD");
-
-  socket.on("JOIN_ROOM", (roomId) => console.log("Joined room: ", roomId));
-  socket.on("log", (roomId) => console.log("Log room: ", roomId));
+  socket.on("JOIN_ROOM", (one, two) =>
+    console.log("Joined room: ", socket, one, two)
+  );
+  socket.on("log", (roomId) => console.log("Log room: ", socket, roomId));
 });
+
+export const logging = () => socket.emit("poo", "go");
 
 export default socket;

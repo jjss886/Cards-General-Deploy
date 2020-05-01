@@ -30,6 +30,11 @@ const updateRoom = (roomId, action) => {
   switch (action.type) {
     case "NEW_ROOM":
       roomObj[roomId] = initialChannel(roomId, 1, action.name);
+    case "JOIN_ROOM":
+      roomObj[roomId].players[action.id] = initialPlayer(
+        action.id,
+        action.name
+      );
     default:
       break;
   }

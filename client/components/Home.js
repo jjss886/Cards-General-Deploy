@@ -60,9 +60,9 @@ class Home extends Component {
 
     if (rooms.has(roomId)) {
       // NEED TO SET CHANNEL AND UPDATE STATE HERE BESIDES JUST REDIRECTING
-      // socket.emit("JOIN_ROOM", roomId);
       const roomObj = { type: "JOIN_ROOM", roomId, id: 2, name };
       await axios.post("/room-action", { action: roomObj });
+      socket.emit("JOIN_ROOM", roomObj);
 
       history.push(`/Room/${roomId}`);
     } else alert("Room Not Available");
