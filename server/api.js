@@ -1,8 +1,12 @@
 const router = require("express").Router();
-// const socketio = require("socket.io");
 const { broadcast } = require("./socket");
+// const socketio = require("socket.io");
 // const socket = require("socket.io-client")("http://localhost:3000");
-module.exports = router;
+// module.exports = router;
+
+let io;
+const ioVariable = (x) => (io = x);
+module.exports = { router, ioVariable };
 
 // ------------------- VARIABLE SETUP -------------------
 const initialChannel = (room, id, name) => ({
@@ -29,8 +33,7 @@ const updateRoom = (roomId, action) => {
     default:
       break;
   }
-  broadcast(action.type, action);
-  // socket.emit(action.type, action);
+  broadcast(io, action.type, action);
 };
 
 // ------------------- ROUTES -------------------
