@@ -55,7 +55,21 @@ export const getAllRooms = () => async (dispatch) => {
 export const addNewRoom = (roomObj) => async (dispatch) => {
   try {
     await axios.post("/room-action", { action: roomObj });
+
     dispatch(ACaddNewRoom(roomObj));
+
+    socket.emit(roomObj.type, roomObj);
+  } catch (error) {
+    console.error("Redux Error -", error);
+  }
+};
+
+export const joinRoom = (roomObj) => async (dispatch) => {
+  try {
+    await axios.post("/room-action", { action: roomObj });
+
+    // NEED TO ADJUST ACCORDINGLY AND DISPATCH !!
+
     socket.emit(roomObj.type, roomObj);
   } catch (error) {
     console.error("Redux Error -", error);
