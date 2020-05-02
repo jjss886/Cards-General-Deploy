@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { getAllRooms, addNewRoom, joinRoom } from "../store";
 import { channelOption } from "../utils/utilities";
+import { getAllRooms, addNewRoom, joinRoom } from "../store";
 
 class Home extends Component {
   constructor() {
