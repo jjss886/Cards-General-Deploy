@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { roomLog } from "../socket";
 
 class Room extends Component {
   render() {
@@ -12,6 +13,10 @@ class Room extends Component {
 
         <button type="button" onClick={history.goBack} className="gBtn">
           Back
+        </button>
+
+        <button type="button" onClick={roomLog}>
+          Log Socket
         </button>
 
         {players.map((x, i) => (

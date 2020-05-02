@@ -37,7 +37,7 @@ class Home extends Component {
 
         addNewRoom(roomObj);
 
-        // socket.emit("new-room", roomObj);
+        socket.emit(roomObj.type, roomObj);
 
         history.push(`/Room/${roomId}`);
 
@@ -50,7 +50,7 @@ class Home extends Component {
     this.setState({ [evt.target.name]: evt.target.value });
   };
 
-  handleSubmit = (evt) => {
+  handleSubmit = async (evt) => {
     evt.preventDefault();
 
     const { roomId, name } = this.state,
@@ -60,6 +60,10 @@ class Home extends Component {
 
     if (rooms.has(roomId)) {
       // NEED TO SET CHANNEL AND UPDATE STATE HERE BESIDES JUST REDIRECTING
+      const roomObj = { type: "JOIN_ROOM", roomId, id: 2, name };
+      await axios.post("/room-action", { action: roomObj });
+      socket.emit("JOIN_ROOM", roomObj);
+
       history.push(`/Room/${roomId}`);
     } else alert("Room Not Available");
   };
