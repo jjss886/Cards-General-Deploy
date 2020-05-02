@@ -43,6 +43,11 @@ export const ACjoinRoom = ({ roomId, id, name }) => ({
 });
 
 // ---------------- THUNKS ----------------
+const actionSocket = async (roomObj) => {
+  await axios.post("/room-action", { action: roomObj });
+  socket.emit(roomObj.type, roomObj);
+};
+
 export const getAllRooms = () => async (dispatch) => {
   try {
     const { data: rooms } = await axios.get("/all-rooms");
@@ -54,11 +59,9 @@ export const getAllRooms = () => async (dispatch) => {
 
 export const addNewRoom = (roomObj) => async (dispatch) => {
   try {
-    await axios.post("/room-action", { action: roomObj });
-
     dispatch(ACaddNewRoom(roomObj));
 
-    socket.emit(roomObj.type, roomObj);
+    await actionSocket(roomObj);
   } catch (error) {
     console.error("Redux Error -", error);
   }
@@ -66,11 +69,9 @@ export const addNewRoom = (roomObj) => async (dispatch) => {
 
 export const joinRoom = (roomObj) => async (dispatch) => {
   try {
-    await axios.post("/room-action", { action: roomObj });
-
     // NEED TO ADJUST ACCORDINGLY AND DISPATCH !!
 
-    socket.emit(roomObj.type, roomObj);
+    await actionSocket(roomObj);
   } catch (error) {
     console.error("Redux Error -", error);
   }
