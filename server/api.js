@@ -32,7 +32,7 @@ const updateRoom = (roomId, action) => {
       roomObj[roomId] = initialChannel(roomId, 1, action.name);
     case "JOIN_ROOM":
       const targetPlayers = roomObj[roomId].players,
-        playerId = Object.keys(targetPlayers).length + 1;
+        playerId = Math.max(...Object.keys(targetPlayers)) + 1;
 
       targetPlayers[playerId] = initialPlayer(playerId, action.name);
     default:
