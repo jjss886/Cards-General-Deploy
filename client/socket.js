@@ -1,5 +1,5 @@
 import io from "socket.io-client";
-import store, { ACaddNewRoom, ACjoinRoom } from "./store";
+import store, { addNewRoom, joinRoom } from "./store";
 
 const socket = io(window.location.origin);
 
@@ -10,13 +10,13 @@ socket.on("connect", () => {
 
   socket.on("NEW_ROOM", (roomId, roomObj, object) => {
     console.log("New Room Socket -", roomId, roomObj);
-    dispatch(ACaddNewRoom(roomId, roomObj[roomId]));
+    dispatch(addNewRoom(roomId, roomObj[roomId]));
   });
 
   socket.on("JOIN_ROOM", (roomId, roomObj) => {
     // console.log("Joined room: ", roomId, roomObj[roomId]);
     console.log("Joined room: ", roomObj[roomId].players);
-    dispatch(ACjoinRoom(roomObj[roomId].players));
+    dispatch(joinRoom(roomObj[roomId].players));
   });
 
   socket.on("log", (roomId) => console.log("Log room: ", socket, roomId));

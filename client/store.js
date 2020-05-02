@@ -5,7 +5,7 @@ import axios from "axios";
 import socket from "./socket";
 
 // --------------------- INITIAL STATE ---------------------
-const initialState = { rooms: new Set(), channel: {} };
+const initialState = { rooms: {}, channel: {} };
 const initialChannel = (room, id, name) => ({
   room,
   players: { [id]: initialPlayer(id, name) },
@@ -25,11 +25,11 @@ const ADD_NEW_ROOM = "ADD_NEW_ROOM";
 const JOIN_ROOM = "JOIN_ROOM";
 
 // --------------------- ACTION CREATORS ---------------------
-export const ACgetAllRooms = (rooms) => ({
+export const getAllRooms = (rooms) => ({
   type: GET_ALL_ROOMS,
   rooms,
 });
-export const ACaddNewRoom = (roomId, channel) => ({
+export const addNewRoom = (roomId, channel) => ({
   type: ADD_NEW_ROOM,
   roomId,
   id,
@@ -41,7 +41,7 @@ export const ACaddNewRoom = (roomId, channel) => ({
 //   id,
 //   name,
 // });
-export const ACjoinRoom = (players) => ({
+export const joinRoom = (players) => ({
   type: JOIN_ROOM,
   players,
 });
@@ -51,7 +51,7 @@ const allTypes = {
   // NEW_ROOM: true,
 };
 
-const actionSocket = async (roomObj) => {
+export const actionSocket = async (roomObj) => {
   const { type } = roomObj;
 
   await axios.post("/room-action", { action: roomObj });
@@ -60,34 +60,34 @@ const actionSocket = async (roomObj) => {
 };
 
 // --------------------- THUNKS ---------------------
-export const getAllRooms = () => async (dispatch) => {
+export const getAllRoomsAPI = () => async (dispatch) => {
   try {
-    const { data: rooms } = await axios.get("/all-rooms");
-    dispatch(ACgetAllRooms(new Set(rooms)));
+    const { data: roomObj } = await axios.get("/all-rooms");
+    dispatch(getAllRooms(roomObj));
   } catch (error) {
     console.error("Redux Error -", error);
   }
 };
 
-export const addNewRoom = (roomObj) => async (dispatch) => {
-  try {
-    // dispatch(ACaddNewRoom(roomObj));
+// export const addNewRoom = (roomObj) => async (dispatch) => {
+//   try {
+//     // dispatch(ACaddNewRoom(roomObj));
 
-    await actionSocket(roomObj);
-  } catch (error) {
-    console.error("Redux Error -", error);
-  }
-};
+//     await actionSocket(roomObj);
+//   } catch (error) {
+//     console.error("Redux Error -", error);
+//   }
+// };
 
-export const joinRoom = (roomObj) => async (dispatch) => {
-  try {
-    // NEED TO ADJUST ACCORDINGLY AND DISPATCH !!
+// export const joinRoom = (roomObj) => async (dispatch) => {
+//   try {
+//     // NEED TO ADJUST ACCORDINGLY AND DISPATCH !!
 
-    await actionSocket(roomObj);
-  } catch (error) {
-    console.error("Redux Error -", error);
-  }
-};
+//     await actionSocket(roomObj);
+//   } catch (error) {
+//     console.error("Redux Error -", error);
+//   }
+// };
 
 // --------------------- REDUCER ---------------------
 const reducer = (state = initialState, action) => {

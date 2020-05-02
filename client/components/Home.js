@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { channelOption } from "../utils/utilities";
-import { getAllRooms, addNewRoom, joinRoom } from "../store";
+// import { getAllRooms, addNewRoom, joinRoom, actionSocket } from "../store";
+import { getAllRoomsAPI, actionSocket } from "../store";
 
 class Home extends Component {
   constructor() {
@@ -10,7 +11,7 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    this.props.getAllRooms();
+    this.props.getAllRoomsAPI();
   }
 
   roomCreate = async () => {
@@ -27,8 +28,10 @@ class Home extends Component {
         roomId += channelOption[x];
       }
 
-      if (!rooms.has(roomId)) {
-        addNewRoom({ type: "NEW_ROOM", roomId, name });
+      if (!(roomId in rooms)) {
+        // addNewRoom({ type: "NEW_ROOM", roomId, name });
+
+        actionSocket({ type: "NEW_ROOM", roomId, name });
 
         history.push(`/Room/${roomId}`);
 
@@ -49,16 +52,21 @@ class Home extends Component {
 
     if (!name.length) return alert("Please fill in name");
 
-    if (rooms.has(roomId)) {
-      joinRoom({ type: "JOIN_ROOM", roomId, name });
+    // if (rooms.has(roomId)) {
+    if (roomId in rooms) {
+      if (!rooms[roomId].includes(name)) {
+        // joinRoom({ type: "JOIN_ROOM", roomId, name });
 
-      history.push(`/Room/${roomId}`);
+        actionSocket({ type: "JOIN_ROOM", roomId, name });
+
+        history.push(`/Room/${roomId}`);
+      } else alert("Name Already Taken");
     } else alert("Room Not Available");
   };
 
   render() {
     const { rooms } = this.props,
-      roomIds = [...rooms.values()];
+      roomIds = Object.keys(rooms);
 
     return (
       <div className="houseDiv mainDiv">
@@ -97,9 +105,9 @@ class Home extends Component {
 const mapState = (state) => ({ rooms: state.rooms });
 
 const mapDispatch = (dispatch) => ({
-  getAllRooms: () => dispatch(getAllRooms()),
-  addNewRoom: (roomObj) => dispatch(addNewRoom(roomObj)),
-  joinRoom: (roomObj) => dispatch(joinRoom(roomObj)),
+  getAllRoomsAPI: () => dispatch(getAllRoomsAPI()),
+  // addNewRoom: (roomObj) => dispatch(addNewRoom(roomObj)),
+  // joinRoom: (roomObj) => dispatch(joinRoom(roomObj)),
 });
 
 export default connect(mapState, mapDispatch)(Home);
