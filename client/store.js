@@ -4,7 +4,7 @@ import thunkMiddlware from "redux-thunk";
 import axios from "axios";
 import socket from "./socket";
 
-// ---------------- INITIAL STATE ----------------
+// --------------------- INITIAL STATE ---------------------
 const initialState = { rooms: new Set(), channel: {} };
 const initialChannel = (room, id, name) => ({
   room,
@@ -19,12 +19,12 @@ const initialPlayer = (id, name) => ({
   points: 0,
 });
 
-// ---------------- ACTION TYPES ----------------
+// --------------------- ACTION TYPES ---------------------
 const GET_ALL_ROOMS = "GET_ALL_ROOMS";
 const ADD_NEW_ROOM = "ADD_NEW_ROOM";
 const JOIN_ROOM = "JOIN_ROOM";
 
-// ---------------- ACTION CREATORS ----------------
+// --------------------- ACTION CREATORS ---------------------
 export const ACgetAllRooms = (rooms) => ({
   type: GET_ALL_ROOMS,
   rooms,
@@ -46,12 +46,20 @@ export const ACjoinRoom = (players) => ({
   players,
 });
 
-// ---------------- THUNKS ----------------
-const actionSocket = async (roomObj) => {
-  await axios.post("/room-action", { action: roomObj });
-  // socket.emit(roomObj.type, roomObj);
+// --------------------- HELPER ---------------------
+const allTypes = {
+  // NEW_ROOM: true,
 };
 
+const actionSocket = async (roomObj) => {
+  const { type } = roomObj;
+
+  await axios.post("/room-action", { action: roomObj });
+
+  if (!allTypes[type]) socket.emit(type, roomObj);
+};
+
+// --------------------- THUNKS ---------------------
 export const getAllRooms = () => async (dispatch) => {
   try {
     const { data: rooms } = await axios.get("/all-rooms");
@@ -81,7 +89,7 @@ export const joinRoom = (roomObj) => async (dispatch) => {
   }
 };
 
-// ---------------- REDUCER ----------------
+// --------------------- REDUCER ---------------------
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_ALL_ROOMS:
@@ -109,7 +117,7 @@ const reducer = (state = initialState, action) => {
   }
 };
 
-// ---------------- STORE ----------------
+// --------------------- STORE ---------------------
 const middleware = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const store = createStore(

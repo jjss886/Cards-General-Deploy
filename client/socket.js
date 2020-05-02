@@ -8,13 +8,14 @@ socket.on("connect", () => {
 
   const { dispatch, getState } = store;
 
-  socket.on("NEW_ROOM", (roomObj) => {
-    console.log("New Room Socket -", roomObj);
-    dispatch(ACaddNewRoom(roomObj));
+  socket.on("NEW_ROOM", (roomId, roomObj, object) => {
+    console.log("New Room Socket -", roomId, roomObj);
+    dispatch(ACaddNewRoom(object));
   });
 
   socket.on("JOIN_ROOM", (roomId, roomObj) => {
-    console.log("Joined room: ", roomId, roomObj[roomId]);
+    // console.log("Joined room: ", roomId, roomObj[roomId]);
+    console.log("Joined room: ", roomObj[roomId].players);
     dispatch(ACjoinRoom(roomObj[roomId].players));
   });
 
