@@ -1,5 +1,6 @@
-const socketio = require("socket.io");
+let roomObjRef = {};
 
+// -------------------- DIRECT CLIENT CALL --------------------
 const socketFn = (io) => {
   io.on("connection", (socket) => {
     console.log(`SERVER SOCKET CONNECTED: ${socket.id}`);
@@ -9,17 +10,17 @@ const socketFn = (io) => {
     });
 
     socket.on("NEW_ROOM", (roomObj) => {
-      console.log("NEW ROOM SOCKET ?! ", roomObj);
       socket.join(roomObj.roomId);
-      socket.broadcast.emit("NEW_ROOM", roomObj);
+
+      // console.log("NEW ROOM SOCKET -- ", io.sockets.adapter.rooms, roomObjRef);
+      io.to(roomObj.roomId).emit("JOIN_ROOM", roomObj.roomId, roomObjRef);
     });
 
     socket.on("JOIN_ROOM", (roomObj) => {
       socket.join(roomObj.roomId);
-      // socket.broadcast.emit("log", roomObj);
-      // socket.emit("log", roomObj);
-      socket.to(roomObj.roomId).emit("log", roomObj);
-      console.log("INSIDE ROUND 2 JOIN ?!", roomObj.roomId, socket.rooms);
+
+      // console.log("JOIN ROOM SOCKET -- ", io.sockets.adapter.rooms, roomObjRef);
+      io.to(roomObj.roomId).emit("JOIN_ROOM", roomObj.roomId, roomObjRef);
     });
 
     socket.on("ROOM_LOG", () =>
@@ -28,47 +29,19 @@ const socketFn = (io) => {
   });
 };
 
+// -------------------- API SERVER CALL --------------------
 const allTypes = {
   NEW_ROOM: true,
+  CLEAR_ROOM: true,
 };
 
-// IO EMIT LEADS TO ALL CLIENTS SEEING
-const broadcast = (io, roomId, type, object, roomObj) => {
-  // console.log("BROADCAST -", Object.keys(io), io);
-  // console.log("BROADCAST -", io.__proto__);
-  console.log("BROADCAST -", io.sockets.adapter);
+const broadcast = (io, type, roomId, roomObj, object) => {
+  // console.log("BROADCAST ROOM -", io.sockets.adapter.rooms);
 
-  if (allTypes[type]) io.emit(type, object, roomId, roomObj);
-  else io.to(roomId).emit(type, object, roomId, roomObj);
+  roomObjRef = roomObj;
 
-  // console.log("BROADCAST FIRST -", roomId, roomObj);
-  // const socket = socketio(io);
-  // socket.emit(type, roomId, roomObj, object);
-  // socket.emit(type, object, roomObj);
-  // socket.emit(type, object);
-  // console.log("hmmm -", roomObj);
-  // io.on("connection", (socket) => {
-  //   console.log("COME ON -", socket.id);
-  //   socket.join(roomId);
-  // });
-  // const room = io.of(`/${roomId}`);
-  // room.on("connection", (socket) => console.log("hello -", socket, roomId));
-  // room.on("NEW_ROOM", (roomObj) => {
-  //   console.log("Hello?! -", roomObj);
-  //   room.emit("NEW_ROOM", roomObj);
-  // });
-  // io.emit("NEW_ROOM", object);
-  // room.emit("log", roomId);
-  // console.log("hmm -", Object.keys(room));
-  // io.of(`/Room/${roomId}`).on("connection", (socket) => {
-  //   console.log("hello -", Object.keys(socket), roomId);
-  //   socket.on("JOIN_ROOM", (roomId) => {
-  //     console.log("UMMM ?! -", roomId);
-  //     socket.join(roomId);
-  //     socket.emit("log", roomId);
-  //   });
-  //   socket.emit(type, object);
-  // });
+  if (allTypes[type]) io.emit(type, roomId, roomObj, object);
+  else io.to(roomId).emit(type, roomId, roomObj, object);
 };
 
 module.exports = {

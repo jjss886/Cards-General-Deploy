@@ -5,7 +5,7 @@ import { roomLog } from "../socket";
 class Room extends Component {
   render() {
     const { channel, history } = this.props,
-      players = channel.players ? Object.values(channel.players) : [];
+      players = channel.players ? Object.keys(channel.players) : [];
 
     return (
       <div className="mainDiv">
@@ -19,9 +19,9 @@ class Room extends Component {
           Log Socket
         </button>
 
-        {players.map((x, i) => (
+        {players.map((p, i) => (
           <p key={i}>
-            {x.id}. {x.name}
+            {i + 1}. {p}
           </p>
         ))}
       </div>

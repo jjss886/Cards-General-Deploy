@@ -1,5 +1,5 @@
 import io from "socket.io-client";
-import store, { ACaddNewRoom, ACjoinRoom } from "./store";
+import store, { getAllRooms, addNewRoom, joinRoom } from "./store";
 
 const socket = io(window.location.origin);
 
@@ -8,14 +8,19 @@ socket.on("connect", () => {
 
   const { dispatch, getState } = store;
 
-  socket.on("NEW_ROOM", (roomObj) => {
-    console.log("New Room Socket -", roomObj);
-    dispatch(ACaddNewRoom(roomObj));
+  socket.on("NEW_ROOM", (roomId, roomObj) => {
+    console.log("New Room Socket -", roomId, roomObj);
+    dispatch(addNewRoom(roomId, Object.keys(roomObj[roomId].players)));
   });
 
   socket.on("JOIN_ROOM", (roomId, roomObj) => {
-    console.log("Joined room: ", roomId, roomObj[roomId]);
-    dispatch(ACjoinRoom(roomObj[roomId].players));
+    console.log("Joined room: ", roomObj[roomId].players);
+    const channel = roomObj[roomId];
+    dispatch(joinRoom(roomId, channel, Object.keys(channel.players)));
+  });
+
+  socket.on("CLEAR_ROOM", (roomId, roomObj) => {
+    dispatch(getAllRooms(roomObj));
   });
 
   socket.on("log", (roomId) => console.log("Log room: ", socket, roomId));

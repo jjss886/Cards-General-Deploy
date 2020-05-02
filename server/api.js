@@ -1,50 +1,54 @@
 const router = require("express").Router();
 const { broadcast } = require("./socket");
-// const socketio = require("socket.io");
-// const socket = require("socket.io-client")("http://localhost:3000");
-// module.exports = router;
 
 let io;
 const ioVariable = (x) => (io = x);
 module.exports = { router, ioVariable };
 
 // ------------------- VARIABLE SETUP -------------------
-const initialChannel = (room, id, name) => ({
+const initialChannel = (room, name) => ({
   room,
-  players: { [id]: initialPlayer(id, name) },
+  players: { [name]: initialPlayer(name) },
   deck: [],
   table: [],
 });
-const initialPlayer = (id, name) => ({
-  id,
+const initialPlayer = (name) => ({
   name,
   hand: [],
   points: 0,
 });
-const roomObj = {
-  ABCD: initialChannel("ABCD", 1, "Bob"),
-};
+const initialRoom = { ABCD: initialChannel("ABCD", "Bob") };
+let roomObj = { ...initialRoom };
 
 // ------------------- HELPER -------------------
 const updateRoom = (roomId, action) => {
   switch (action.type) {
     case "NEW_ROOM":
-      roomObj[roomId] = initialChannel(roomId, 1, action.name);
+      roomObj[roomId] = initialChannel(roomId, action.name);
+      break;
     case "JOIN_ROOM":
-      const targetPlayers = roomObj[roomId].players,
-        playerId = Object.keys(targetPlayers).length + 1;
-
-      targetPlayers[playerId] = initialPlayer(playerId, action.name);
+      const targetPlayers = roomObj[roomId].players;
+      targetPlayers[action.name] = initialPlayer(action.name);
+      break;
+    case "CLEAR_ROOM":
+      roomObj = { ...initialRoom };
+      break;
     default:
       break;
   }
-  broadcast(io, roomId, action.type, action, roomObj);
+
+  broadcast(io, action.type, roomId, roomObj, action);
 };
 
 // ------------------- ROUTES -------------------
 router.get("/all-rooms", (req, res, next) => {
   try {
-    res.json(Object.keys(roomObj));
+    const roomState = Object.keys(roomObj).reduce((a, v) => {
+      a[v] = Object.keys(roomObj[v].players);
+      return a;
+    }, {});
+
+    res.json(roomState);
   } catch (error) {
     next(error);
   }
