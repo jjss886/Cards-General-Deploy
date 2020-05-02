@@ -1,4 +1,18 @@
 let roomObjRef = {};
+const allTypes = {
+  NEW_ROOM: true,
+  CLEAR_ROOM: true,
+};
+
+// -------------------- API SERVER CALL --------------------
+const broadcast = (io, type, roomId, roomObj, object) => {
+  // console.log("BROADCAST ROOM -", io.sockets.adapter.rooms);
+
+  roomObjRef = roomObj;
+
+  if (allTypes[type]) io.emit(type, roomId, roomObj, object);
+  else io.to(roomId).emit(type, roomId, roomObj, object);
+};
 
 // -------------------- DIRECT CLIENT CALL --------------------
 const socketFn = (io) => {
@@ -29,24 +43,9 @@ const socketFn = (io) => {
   });
 };
 
-// -------------------- API SERVER CALL --------------------
-const allTypes = {
-  NEW_ROOM: true,
-  CLEAR_ROOM: true,
-};
-
-const broadcast = (io, type, roomId, roomObj, object) => {
-  // console.log("BROADCAST ROOM -", io.sockets.adapter.rooms);
-
-  roomObjRef = roomObj;
-
-  if (allTypes[type]) io.emit(type, roomId, roomObj, object);
-  else io.to(roomId).emit(type, roomId, roomObj, object);
-};
-
 module.exports = {
-  socketFn,
   broadcast,
+  socketFn,
 };
 
 // Wooz Gist 1: https://bit.ly/35ku7cF
