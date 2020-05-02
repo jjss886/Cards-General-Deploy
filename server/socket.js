@@ -1,5 +1,3 @@
-const socketio = require("socket.io");
-
 // -------------------- DIRECT CLIENT CALL --------------------
 const socketFn = (io) => {
   io.on("connection", (socket) => {
@@ -16,10 +14,11 @@ const socketFn = (io) => {
     });
 
     socket.on("JOIN_ROOM", (roomObj) => {
+      console.log("JOIN ROOM SOCKET -- ", roomObj);
       socket.join(roomObj.roomId);
       // socket.emit("log", roomObj);
-      socket.to(roomObj.roomId).emit("log", roomObj);
-      console.log("INSIDE ROUND 2 JOIN ?!", roomObj.roomId, socket.rooms);
+      // socket.to(roomObj.roomId).emit("log", roomObj);
+      // console.log("INSIDE ROUND 2 JOIN ?!", roomObj.roomId, socket.rooms);
     });
 
     socket.on("ROOM_LOG", () =>
@@ -33,8 +32,8 @@ const allTypes = {
   NEW_ROOM: true,
 };
 
-const broadcast = (io, roomId, type, object, roomObj) => {
-  // console.log("BROADCAST ROOM -", io.sockets.adapter.rooms);
+const broadcast = (io, type, roomId, roomObj, object) => {
+  console.log("BROADCAST ROOM -", io.sockets.adapter.rooms);
 
   if (allTypes[type]) io.emit(type, roomId, roomObj, object);
   else io.to(roomId).emit(type, roomId, roomObj, object);

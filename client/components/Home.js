@@ -28,7 +28,7 @@ class Home extends Component {
       }
 
       if (!rooms.has(roomId)) {
-        addNewRoom({ type: "NEW_ROOM", roomId, id: 1, name });
+        addNewRoom({ type: "NEW_ROOM", roomId, name });
 
         history.push(`/Room/${roomId}`);
 

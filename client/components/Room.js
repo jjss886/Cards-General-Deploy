@@ -6,6 +6,7 @@ class Room extends Component {
   render() {
     const { channel, history } = this.props,
       players = channel.players ? Object.values(channel.players) : [];
+    console.log("Room Render -", players);
 
     return (
       <div className="mainDiv">

@@ -10,7 +10,7 @@ socket.on("connect", () => {
 
   socket.on("NEW_ROOM", (roomId, roomObj, object) => {
     console.log("New Room Socket -", roomId, roomObj);
-    dispatch(ACaddNewRoom(object));
+    dispatch(ACaddNewRoom(roomId, roomObj[roomId]));
   });
 
   socket.on("JOIN_ROOM", (roomId, roomObj) => {

@@ -42,7 +42,7 @@ const updateRoom = (roomId, action) => {
       break;
   }
 
-  broadcast(io, roomId, action.type, action, roomObj);
+  broadcast(io, action.type, roomId, roomObj, action);
 };
 
 // ------------------- ROUTES -------------------

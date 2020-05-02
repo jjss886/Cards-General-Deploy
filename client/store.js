@@ -29,7 +29,7 @@ export const ACgetAllRooms = (rooms) => ({
   type: GET_ALL_ROOMS,
   rooms,
 });
-export const ACaddNewRoom = ({ roomId, id, name }) => ({
+export const ACaddNewRoom = (roomId, channel) => ({
   type: ADD_NEW_ROOM,
   roomId,
   id,
@@ -71,7 +71,7 @@ export const getAllRooms = () => async (dispatch) => {
 
 export const addNewRoom = (roomObj) => async (dispatch) => {
   try {
-    dispatch(ACaddNewRoom(roomObj));
+    // dispatch(ACaddNewRoom(roomObj));
 
     await actionSocket(roomObj);
   } catch (error) {
