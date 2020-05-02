@@ -6,14 +6,13 @@ import socket from "./socket";
 
 // --------------------- INITIAL STATE ---------------------
 const initialState = { rooms: {}, channel: {} };
-const initialChannel = (room, id, name) => ({
+const initialChannel = (room, name) => ({
   room,
-  players: { [id]: initialPlayer(id, name) },
+  players: { [name]: initialPlayer(name) },
   deck: [],
   table: [],
 });
-const initialPlayer = (id, name) => ({
-  id,
+const initialPlayer = (name) => ({
   name,
   hand: [],
   points: 0,
@@ -29,13 +28,12 @@ export const getAllRooms = (rooms) => ({
   type: GET_ALL_ROOMS,
   rooms,
 });
-export const addNewRoom = (roomId, channel) => ({
+export const addNewRoom = (roomId, name) => ({
   type: ADD_NEW_ROOM,
   roomId,
-  id,
   name,
 });
-// export const ACjoinRoom = ({ roomId, id, name }) => ({
+// export const joinRoom = ({ roomId, id, name }) => ({
 //   type: JOIN_ROOM,
 //   roomId,
 //   id,
@@ -100,8 +98,9 @@ const reducer = (state = initialState, action) => {
     case ADD_NEW_ROOM:
       return {
         ...state,
-        rooms: new Set(state.rooms).add(action.roomId),
-        channel: initialChannel(action.roomId, action.id, action.name),
+        // rooms: new Set(state.rooms).add(action.roomId),
+        rooms: { ...state.rooms, [action.roomId]: [action.name] },
+        channel: initialChannel(action.roomId, action.name),
       };
     case JOIN_ROOM:
       return {
