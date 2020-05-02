@@ -28,13 +28,16 @@ export const getAllRooms = (rooms) => ({
   type: GET_ALL_ROOMS,
   rooms,
 });
-export const addNewRoom = (roomId) => ({
+export const addNewRoom = (roomId, players) => ({
   type: ADD_NEW_ROOM,
   roomId,
+  players,
 });
-export const joinRoom = (channel) => ({
+export const joinRoom = (roomId, channel, players) => ({
   type: JOIN_ROOM,
+  roomId,
   channel,
+  players,
 });
 
 // --------------------- HELPER ---------------------
@@ -71,11 +74,15 @@ const reducer = (state = initialState, action) => {
     case ADD_NEW_ROOM:
       return {
         ...state,
-        rooms: { ...state.rooms, [action.roomId]: [action.name] },
+        rooms: { ...state.rooms, [action.roomId]: action.players },
       };
     case JOIN_ROOM:
       return {
         ...state,
+        rooms: {
+          ...state.rooms,
+          [action.roomId]: action.players,
+        },
         channel: action.channel,
       };
     default:
