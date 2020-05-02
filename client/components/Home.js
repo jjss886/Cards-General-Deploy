@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import axios from "axios";
 import { getAllRooms, addNewRoom, joinRoom } from "../store";
 import { channelOption } from "../utils/utilities";
-import socket from "../socket";
 
 class Home extends Component {
   constructor() {
