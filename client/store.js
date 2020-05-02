@@ -35,11 +35,15 @@ export const ACaddNewRoom = ({ roomId, id, name }) => ({
   id,
   name,
 });
-export const ACjoinRoom = ({ roomId, id, name }) => ({
+// export const ACjoinRoom = ({ roomId, id, name }) => ({
+//   type: JOIN_ROOM,
+//   roomId,
+//   id,
+//   name,
+// });
+export const ACjoinRoom = (players) => ({
   type: JOIN_ROOM,
-  roomId,
-  id,
-  name,
+  players,
 });
 
 // ---------------- THUNKS ----------------
@@ -94,7 +98,10 @@ const reducer = (state = initialState, action) => {
     case JOIN_ROOM:
       return {
         ...state,
-        channel: initialChannel(action.roomId, action.id, action.name),
+        channel: {
+          ...state.channel,
+          players: action.players,
+        },
       };
     default:
       return state;

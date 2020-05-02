@@ -50,7 +50,7 @@ class Home extends Component {
     if (!name.length) return alert("Please fill in name");
 
     if (rooms.has(roomId)) {
-      joinRoom({ type: "JOIN_ROOM", roomId, id: 2, name });
+      joinRoom({ type: "JOIN_ROOM", roomId, name });
 
       history.push(`/Room/${roomId}`);
     } else alert("Room Not Available");

@@ -31,10 +31,10 @@ const updateRoom = (roomId, action) => {
     case "NEW_ROOM":
       roomObj[roomId] = initialChannel(roomId, 1, action.name);
     case "JOIN_ROOM":
-      roomObj[roomId].players[action.id] = initialPlayer(
-        action.id,
-        action.name
-      );
+      const targetPlayers = roomObj[roomId].players,
+        playerId = Object.keys(targetPlayers).length + 1;
+
+      targetPlayers[playerId] = initialPlayer(playerId, action.name);
     default:
       break;
   }

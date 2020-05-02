@@ -11,17 +11,15 @@ const socketFn = (io) => {
     socket.on("NEW_ROOM", (roomObj) => {
       console.log("NEW ROOM SOCKET ?! ", roomObj);
       socket.join(roomObj.roomId);
-      socket.broadcast.emit("NEW_ROOM", roomObj);
+      socket.emit("NEW_ROOM", roomObj);
     });
 
     socket.on("JOIN_ROOM", (roomObj) => {
-      // console.log("INSIDE JOIN -", roomObj);
       socket.join(roomObj.roomId);
       // socket.broadcast.emit("log", roomObj);
       // socket.emit("log", roomObj);
       socket.to(roomObj.roomId).emit("log", roomObj);
       console.log("INSIDE ROUND 2 JOIN ?!", roomObj.roomId, socket.rooms);
-      // socket.emit("log", roomId);
     });
 
     socket.on("ROOM_LOG", () =>
@@ -31,8 +29,8 @@ const socketFn = (io) => {
 };
 
 const broadcast = (io, roomId, type, object, roomObj) => {
-  console.log("BROADCAST -", io.sockets.adapter.rooms);
-  io.emit(type, roomId, object, roomObj);
+  // console.log("BROADCAST -", io.sockets.adapter.rooms, roomId, object);
+  io.emit(type, roomId, roomObj, object);
 
   // console.log("BROADCAST FIRST -", roomId, roomObj);
   // const socket = socketio(io);
