@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { logging } from "../socket";
+import { roomLog } from "../socket";
 
 class Room extends Component {
   render() {
@@ -15,7 +15,7 @@ class Room extends Component {
           Back
         </button>
 
-        <button type="button" onClick={logging}>
+        <button type="button" onClick={roomLog}>
           Log Socket
         </button>
 

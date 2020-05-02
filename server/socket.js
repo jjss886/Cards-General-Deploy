@@ -24,12 +24,15 @@ const socketFn = (io) => {
       // socket.emit("log", roomId);
     });
 
-    socket.on("poo", (msg) => console.log("logging-", socket.rooms));
+    socket.on("ROOM_LOG", () =>
+      console.log("ROOM LOGGING -", Object.keys(socket.rooms))
+    );
   });
 };
 
 const broadcast = (io, roomId, type, object, roomObj) => {
-  io.emit(type, object, roomObj);
+  console.log("BROADCAST -", io.sockets.adapter.rooms);
+  io.emit(type, roomId, object, roomObj);
 
   // console.log("BROADCAST FIRST -", roomId, roomObj);
   // const socket = socketio(io);

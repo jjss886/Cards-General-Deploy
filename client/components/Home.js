@@ -37,7 +37,7 @@ class Home extends Component {
 
         addNewRoom(roomObj);
 
-        // socket.emit("new-room", roomObj);
+        socket.emit(roomObj.type, roomObj);
 
         history.push(`/Room/${roomId}`);
 
