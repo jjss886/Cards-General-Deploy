@@ -1,5 +1,8 @@
 import { createStore, applyMiddleware, compose } from "redux";
 import { createLogger } from "redux-logger";
+import thunkMiddlware from "redux-thunk";
+import axios from "axios";
+import socket from "./socket";
 
 // ---------------- INITIAL STATE ----------------
 const initialState = { rooms: new Set(), channel: {} };
@@ -22,22 +25,42 @@ const ADD_NEW_ROOM = "ADD_NEW_ROOM";
 const JOIN_ROOM = "JOIN_ROOM";
 
 // ---------------- ACTION CREATORS ----------------
-export const getAllRooms = (rooms) => ({
+export const ACgetAllRooms = (rooms) => ({
   type: GET_ALL_ROOMS,
   rooms,
 });
-export const addNewRoom = ({ roomId, id, name }) => ({
+export const ACaddNewRoom = ({ roomId, id, name }) => ({
   type: ADD_NEW_ROOM,
   roomId,
   id,
   name,
 });
-export const joinRoom = ({ roomId, id, name }) => ({
+export const ACjoinRoom = ({ roomId, id, name }) => ({
   type: JOIN_ROOM,
   roomId,
   id,
   name,
 });
+
+// ---------------- THUNKS ----------------
+export const getAllRooms = () => async (dispatch) => {
+  try {
+    const { data: rooms } = await axios.get("/all-rooms");
+    dispatch(ACgetAllRooms(new Set(rooms)));
+  } catch (error) {
+    console.error("Redux Error -", error);
+  }
+};
+
+export const addNewRoom = (roomObj) => async (dispatch) => {
+  try {
+    await axios.post("/room-action", { action: roomObj });
+    dispatch(ACaddNewRoom(roomObj));
+    socket.emit(roomObj.type, roomObj);
+  } catch (error) {
+    console.error("Redux Error -", error);
+  }
+};
 
 // ---------------- REDUCER ----------------
 const reducer = (state = initialState, action) => {
@@ -68,8 +91,8 @@ const middleware = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const store = createStore(
   reducer,
-  middleware()
-  // middleware(applyMiddleware(createLogger({ collapsed: true })))
+  middleware(applyMiddleware(thunkMiddlware))
+  // middleware(applyMiddleware(thunkMiddlware, createLogger({ collapsed: true })))
 );
 
 export default store;

@@ -11,9 +11,8 @@ class Home extends Component {
     this.state = { roomId: "", name: "" };
   }
 
-  async componentDidMount() {
-    const { data: rooms } = await axios.get("/all-rooms");
-    this.props.getAllRooms(new Set(rooms));
+  componentDidMount() {
+    this.props.getAllRooms();
   }
 
   roomCreate = async () => {
@@ -31,13 +30,7 @@ class Home extends Component {
       }
 
       if (!rooms.has(roomId)) {
-        const roomObj = { type: "NEW_ROOM", roomId, id: 1, name };
-
-        await axios.post("/room-action", { action: roomObj });
-
-        addNewRoom(roomObj);
-
-        socket.emit(roomObj.type, roomObj);
+        addNewRoom({ type: "NEW_ROOM", roomId, id: 1, name });
 
         history.push(`/Room/${roomId}`);
 
@@ -109,7 +102,7 @@ class Home extends Component {
 const mapState = (state) => ({ rooms: state.rooms });
 
 const mapDispatch = (dispatch) => ({
-  getAllRooms: (rooms) => dispatch(getAllRooms(rooms)),
+  getAllRooms: () => dispatch(getAllRooms()),
   addNewRoom: (roomObj) => dispatch(addNewRoom(roomObj)),
 });
 
