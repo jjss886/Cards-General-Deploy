@@ -9,7 +9,7 @@ socket.on("connect", () => {
   const { dispatch, getState } = store;
 
   socket.on("NEW_ROOM", (roomObj) => {
-    console.log("client socket -", roomObj);
+    console.log("New Room Socket -", roomObj);
     dispatch(ACaddNewRoom(roomObj));
   });
 

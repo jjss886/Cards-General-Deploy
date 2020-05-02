@@ -49,7 +49,7 @@ export const ACjoinRoom = (players) => ({
 // ---------------- THUNKS ----------------
 const actionSocket = async (roomObj) => {
   await axios.post("/room-action", { action: roomObj });
-  socket.emit(roomObj.type, roomObj);
+  // socket.emit(roomObj.type, roomObj);
 };
 
 export const getAllRooms = () => async (dispatch) => {
@@ -100,6 +100,7 @@ const reducer = (state = initialState, action) => {
         ...state,
         channel: {
           ...state.channel,
+          // CAN TECHNICALLY IMPROVE AND ONLY ADD ONE PLAYER
           players: action.players,
         },
       };
