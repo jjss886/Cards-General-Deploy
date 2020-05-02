@@ -20,9 +20,8 @@ const initialPlayer = (name) => ({
   hand: [],
   points: 0,
 });
-const roomObj = {
-  ABCD: initialChannel("ABCD", "Bob"),
-};
+const initialRoom = { ABCD: initialChannel("ABCD", "Bob") };
+let roomObj = { ...initialRoom };
 
 // ------------------- HELPER -------------------
 const updateRoom = (roomId, action) => {
@@ -30,12 +29,11 @@ const updateRoom = (roomId, action) => {
     case "NEW_ROOM":
       roomObj[roomId] = initialChannel(roomId, action.name);
       break;
-
     case "JOIN_ROOM":
-      // const targetPlayers = roomObj[roomId].players,
-      //   playerId = Math.max(...Object.keys(targetPlayers)) + 1;
-
       targetPlayers[action.name] = initialPlayer(action.name);
+      break;
+    case "CLEAR_ROOM":
+      roomObj = { ...initialRoom };
       break;
     default:
       break;

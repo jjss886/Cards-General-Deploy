@@ -96,6 +96,14 @@ class Home extends Component {
           </button>
         </form>
 
+        <button
+          type="submit"
+          className="gBtn"
+          onClick={() => actionSocket({ type: "CLEAR_ROOM" })}
+        >
+          Clear Rooms
+        </button>
+
         <div>{roomIds ? roomIds.map((x, i) => <p key={i}>{x}</p>) : null}</div>
       </div>
     );

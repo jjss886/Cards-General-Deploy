@@ -30,6 +30,7 @@ const socketFn = (io) => {
 // -------------------- API SERVER CALL --------------------
 const allTypes = {
   NEW_ROOM: true,
+  CLEAR_ROOM: true,
 };
 
 const broadcast = (io, type, roomId, roomObj, object) => {
