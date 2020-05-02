@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import axios from "axios";
-import { getAllRooms, addNewRoom } from "../store";
+import { getAllRooms, addNewRoom, joinRoom } from "../store";
 import { channelOption } from "../utils/utilities";
 import socket from "../socket";
 
@@ -11,9 +11,8 @@ class Home extends Component {
     this.state = { roomId: "", name: "" };
   }
 
-  async componentDidMount() {
-    const { data: rooms } = await axios.get("/all-rooms");
-    this.props.getAllRooms(new Set(rooms));
+  componentDidMount() {
+    this.props.getAllRooms();
   }
 
   roomCreate = async () => {
@@ -31,13 +30,7 @@ class Home extends Component {
       }
 
       if (!rooms.has(roomId)) {
-        const roomObj = { type: "NEW_ROOM", roomId, id: 1, name };
-
-        await axios.post("/room-action", { action: roomObj });
-
-        addNewRoom(roomObj);
-
-        socket.emit(roomObj.type, roomObj);
+        addNewRoom({ type: "NEW_ROOM", roomId, id: 1, name });
 
         history.push(`/Room/${roomId}`);
 
@@ -54,15 +47,12 @@ class Home extends Component {
     evt.preventDefault();
 
     const { roomId, name } = this.state,
-      { history, rooms } = this.props;
+      { history, rooms, joinRoom } = this.props;
 
     if (!name.length) return alert("Please fill in name");
 
     if (rooms.has(roomId)) {
-      // NEED TO SET CHANNEL AND UPDATE STATE HERE BESIDES JUST REDIRECTING
-      const roomObj = { type: "JOIN_ROOM", roomId, id: 2, name };
-      await axios.post("/room-action", { action: roomObj });
-      socket.emit("JOIN_ROOM", roomObj);
+      joinRoom({ type: "JOIN_ROOM", roomId, id: 2, name });
 
       history.push(`/Room/${roomId}`);
     } else alert("Room Not Available");
@@ -109,8 +99,9 @@ class Home extends Component {
 const mapState = (state) => ({ rooms: state.rooms });
 
 const mapDispatch = (dispatch) => ({
-  getAllRooms: (rooms) => dispatch(getAllRooms(rooms)),
+  getAllRooms: () => dispatch(getAllRooms()),
   addNewRoom: (roomObj) => dispatch(addNewRoom(roomObj)),
+  joinRoom: (roomObj) => dispatch(joinRoom(roomObj)),
 });
 
 export default connect(mapState, mapDispatch)(Home);
