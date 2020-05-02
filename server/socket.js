@@ -8,11 +8,11 @@ const socketFn = (io) => {
       console.log(`${socket.id} SOCKET LEFT DISCONNECTED`);
     });
 
-    // socket.on("NEW_ROOM", (roomObj) => {
-    //   console.log("NEW ROOM SOCKET ?! ", roomObj);
-    //   socket.join(roomObj.roomId);
-    //   socket.broadcast.emit("NEW_ROOM", roomObj);
-    // });
+    socket.on("NEW_ROOM", (roomObj) => {
+      console.log("NEW ROOM SOCKET ?! ", roomObj);
+      socket.join(roomObj.roomId);
+      socket.broadcast.emit("NEW_ROOM", roomObj);
+    });
 
     socket.on("JOIN_ROOM", (roomObj) => {
       socket.join(roomObj.roomId);
@@ -36,6 +36,7 @@ const allTypes = {
 const broadcast = (io, roomId, type, object, roomObj) => {
   // console.log("BROADCAST -", Object.keys(io), io);
   // console.log("BROADCAST -", io.__proto__);
+  console.log("BROADCAST -", io.sockets.adapter);
 
   if (allTypes[type]) io.emit(type, object, roomId, roomObj);
   else io.to(roomId).emit(type, object, roomId, roomObj);
