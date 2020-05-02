@@ -37,6 +37,7 @@ const broadcast = (io, roomId, type, object, roomObj) => {
   // console.log("BROADCAST -", Object.keys(io), io);
   // console.log("BROADCAST -", io.__proto__);
   if (type in allTypes) io.emit(type, object, roomId, roomObj);
+  else io.to(roomId).emit(type, object, roomId, roomObj);
 
   // console.log("BROADCAST FIRST -", roomId, roomObj);
   // const socket = socketio(io);
