@@ -8,20 +8,18 @@ const socketFn = (io) => {
       console.log(`${socket.id} SOCKET LEFT DISCONNECTED`);
     });
 
-    socket.on("NEW_ROOM", (roomObj) => {
-      console.log("NEW ROOM SOCKET ?! ", roomObj);
-      socket.join(roomObj.roomId);
-      socket.broadcast.emit("NEW_ROOM", roomObj);
-    });
+    // socket.on("NEW_ROOM", (roomObj) => {
+    //   console.log("NEW ROOM SOCKET ?! ", roomObj);
+    //   socket.join(roomObj.roomId);
+    //   socket.broadcast.emit("NEW_ROOM", roomObj);
+    // });
 
     socket.on("JOIN_ROOM", (roomObj) => {
-      // console.log("INSIDE JOIN -", roomObj);
       socket.join(roomObj.roomId);
       // socket.broadcast.emit("log", roomObj);
       // socket.emit("log", roomObj);
       socket.to(roomObj.roomId).emit("log", roomObj);
       console.log("INSIDE ROUND 2 JOIN ?!", roomObj.roomId, socket.rooms);
-      // socket.emit("log", roomId);
     });
 
     socket.on("ROOM_LOG", () =>
@@ -30,12 +28,20 @@ const socketFn = (io) => {
   });
 };
 
+const allTypes = {
+  NEW_ROOM: true,
+};
+
+// IO EMIT LEADS TO ALL CLIENTS SEEING
 const broadcast = (io, roomId, type, object, roomObj) => {
-  console.log("BROADCAST -", io.sockets.adapter.rooms);
-  io.emit(type, roomId, object, roomObj);
+  // console.log("BROADCAST -", Object.keys(io), io);
+  // console.log("BROADCAST -", io.__proto__);
+  if (type in allTypes) io.emit(type, object, roomId, roomObj);
+  else io.to(roomId).emit(type, object, roomId, roomObj);
 
   // console.log("BROADCAST FIRST -", roomId, roomObj);
   // const socket = socketio(io);
+  // socket.emit(type, roomId, roomObj, object);
   // socket.emit(type, object, roomObj);
   // socket.emit(type, object);
   // console.log("hmmm -", roomObj);

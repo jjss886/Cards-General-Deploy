@@ -1,10 +1,7 @@
 import io from "socket.io-client";
-import store, { addNewRoom } from "./store";
+import store, { ACaddNewRoom, ACjoinRoom } from "./store";
 
 const socket = io(window.location.origin);
-// const socket = io("/ABCD");
-// const socket = io(window.location.origin + "/Room/ABCD");
-// const socket = io(window.location.href);
 
 socket.on("connect", () => {
   console.log("I am now connected to the server!", socket);
@@ -12,13 +9,14 @@ socket.on("connect", () => {
   const { dispatch, getState } = store;
 
   socket.on("NEW_ROOM", (roomObj) => {
-    console.log("client socket -", roomObj);
-    dispatch(addNewRoom(roomObj));
+    console.log("New Room Socket -", roomObj);
+    dispatch(ACaddNewRoom(roomObj));
   });
 
-  socket.on("JOIN_ROOM", (one, two) =>
-    console.log("Joined room: ", socket, one, two)
-  );
+  socket.on("JOIN_ROOM", (roomId, roomObj) => {
+    console.log("Joined room: ", roomId, roomObj[roomId]);
+    dispatch(ACjoinRoom(roomObj[roomId].players));
+  });
 
   socket.on("log", (roomId) => console.log("Log room: ", socket, roomId));
 });

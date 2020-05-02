@@ -35,14 +35,23 @@ export const ACaddNewRoom = ({ roomId, id, name }) => ({
   id,
   name,
 });
-export const ACjoinRoom = ({ roomId, id, name }) => ({
+// export const ACjoinRoom = ({ roomId, id, name }) => ({
+//   type: JOIN_ROOM,
+//   roomId,
+//   id,
+//   name,
+// });
+export const ACjoinRoom = (players) => ({
   type: JOIN_ROOM,
-  roomId,
-  id,
-  name,
+  players,
 });
 
 // ---------------- THUNKS ----------------
+const actionSocket = async (roomObj) => {
+  await axios.post("/room-action", { action: roomObj });
+  // socket.emit(roomObj.type, roomObj);
+};
+
 export const getAllRooms = () => async (dispatch) => {
   try {
     const { data: rooms } = await axios.get("/all-rooms");
@@ -54,11 +63,9 @@ export const getAllRooms = () => async (dispatch) => {
 
 export const addNewRoom = (roomObj) => async (dispatch) => {
   try {
-    await axios.post("/room-action", { action: roomObj });
-
     dispatch(ACaddNewRoom(roomObj));
 
-    socket.emit(roomObj.type, roomObj);
+    await actionSocket(roomObj);
   } catch (error) {
     console.error("Redux Error -", error);
   }
@@ -66,11 +73,9 @@ export const addNewRoom = (roomObj) => async (dispatch) => {
 
 export const joinRoom = (roomObj) => async (dispatch) => {
   try {
-    await axios.post("/room-action", { action: roomObj });
-
     // NEED TO ADJUST ACCORDINGLY AND DISPATCH !!
 
-    socket.emit(roomObj.type, roomObj);
+    await actionSocket(roomObj);
   } catch (error) {
     console.error("Redux Error -", error);
   }
@@ -93,7 +98,11 @@ const reducer = (state = initialState, action) => {
     case JOIN_ROOM:
       return {
         ...state,
-        channel: initialChannel(action.roomId, action.id, action.name),
+        channel: {
+          ...state.channel,
+          // CAN TECHNICALLY IMPROVE AND ONLY ADD ONE PLAYER
+          players: action.players,
+        },
       };
     default:
       return state;
