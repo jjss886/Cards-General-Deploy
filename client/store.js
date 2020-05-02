@@ -28,20 +28,13 @@ export const getAllRooms = (rooms) => ({
   type: GET_ALL_ROOMS,
   rooms,
 });
-export const addNewRoom = (roomId, name) => ({
+export const addNewRoom = (roomId) => ({
   type: ADD_NEW_ROOM,
   roomId,
-  name,
 });
-// export const joinRoom = ({ roomId, id, name }) => ({
-//   type: JOIN_ROOM,
-//   roomId,
-//   id,
-//   name,
-// });
-export const joinRoom = (players) => ({
+export const joinRoom = (channel) => ({
   type: JOIN_ROOM,
-  players,
+  channel,
 });
 
 // --------------------- HELPER ---------------------
@@ -67,26 +60,6 @@ export const getAllRoomsAPI = () => async (dispatch) => {
   }
 };
 
-// export const addNewRoom = (roomObj) => async (dispatch) => {
-//   try {
-//     // dispatch(ACaddNewRoom(roomObj));
-
-//     await actionSocket(roomObj);
-//   } catch (error) {
-//     console.error("Redux Error -", error);
-//   }
-// };
-
-// export const joinRoom = (roomObj) => async (dispatch) => {
-//   try {
-//     // NEED TO ADJUST ACCORDINGLY AND DISPATCH !!
-
-//     await actionSocket(roomObj);
-//   } catch (error) {
-//     console.error("Redux Error -", error);
-//   }
-// };
-
 // --------------------- REDUCER ---------------------
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -98,18 +71,12 @@ const reducer = (state = initialState, action) => {
     case ADD_NEW_ROOM:
       return {
         ...state,
-        // rooms: new Set(state.rooms).add(action.roomId),
         rooms: { ...state.rooms, [action.roomId]: [action.name] },
-        channel: initialChannel(action.roomId, action.name),
       };
     case JOIN_ROOM:
       return {
         ...state,
-        channel: {
-          ...state.channel,
-          // CAN TECHNICALLY IMPROVE AND ONLY ADD ONE PLAYER
-          players: action.players,
-        },
+        channel: action.channel,
       };
     default:
       return state;

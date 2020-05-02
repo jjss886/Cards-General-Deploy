@@ -1,8 +1,5 @@
 const router = require("express").Router();
 const { broadcast } = require("./socket");
-// const socketio = require("socket.io");
-// const socket = require("socket.io-client")("http://localhost:3000");
-// module.exports = router;
 
 let io;
 const ioVariable = (x) => (io = x);
@@ -30,6 +27,7 @@ const updateRoom = (roomId, action) => {
       roomObj[roomId] = initialChannel(roomId, action.name);
       break;
     case "JOIN_ROOM":
+      const targetPlayers = roomObj[roomId].players;
       targetPlayers[action.name] = initialPlayer(action.name);
       break;
     case "CLEAR_ROOM":

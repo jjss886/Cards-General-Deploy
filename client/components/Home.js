@@ -32,6 +32,7 @@ class Home extends Component {
         // addNewRoom({ type: "NEW_ROOM", roomId, name });
 
         actionSocket({ type: "NEW_ROOM", roomId, name });
+        // actionSocket({ type: "JOIN_ROOM", roomId, name });
 
         history.push(`/Room/${roomId}`);
 

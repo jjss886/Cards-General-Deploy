@@ -10,12 +10,13 @@ socket.on("connect", () => {
 
   socket.on("NEW_ROOM", (roomId, roomObj) => {
     console.log("New Room Socket -", roomId, roomObj);
-    dispatch(addNewRoom(roomId, Object.keys(roomObj[roomId].players)[0]));
+    // dispatch(addNewRoom(roomId, Object.keys(roomObj[roomId].players)[0]));
+    dispatch(addNewRoom(roomId));
   });
 
   socket.on("JOIN_ROOM", (roomId, roomObj) => {
     console.log("Joined room: ", roomObj[roomId].players);
-    dispatch(joinRoom(roomObj[roomId].players));
+    dispatch(joinRoom(roomObj[roomId]));
   });
 
   socket.on("CLEAR_ROOM", (roomId, roomObj) => {
