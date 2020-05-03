@@ -1,18 +1,25 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { actionSocket } from "../store";
 import { roomLog } from "../socket";
 
 class Room extends Component {
+  leaveRoom = () => {
+    const { user, channel, history } = this.props;
+    actionSocket({ type: "LEAVE_ROOM", roomId: channel.room, name: user });
+    history.push("/");
+  };
+
   render() {
-    const { channel, history } = this.props,
+    const { channel } = this.props,
       players = channel.players ? Object.values(channel.players) : [];
 
     return (
       <div className="mainDiv">
         <h3>Welcome to room: {channel.room}</h3>
 
-        <button type="button" onClick={history.goBack} className="gBtn">
-          Back
+        <button type="button" onClick={this.leaveRoom} className="gBtn">
+          Leave
         </button>
 
         <button type="button" onClick={roomLog}>
@@ -29,6 +36,6 @@ class Room extends Component {
   }
 }
 
-const mapState = (state) => ({ channel: state.channel });
+const mapState = (state) => ({ user: state.user, channel: state.channel });
 
 export default connect(mapState)(Room);

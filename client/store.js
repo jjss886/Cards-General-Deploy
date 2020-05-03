@@ -5,28 +5,29 @@ import axios from "axios";
 import socket from "./socket";
 
 // --------------------- INITIAL STATE ---------------------
-const initialState = { rooms: {}, channel: {} };
-const initialChannel = (room, name) => ({
-  room,
-  players: { [name]: initialPlayer(name) },
-  deck: [],
-  table: [],
-});
-const initialPlayer = (name) => ({
-  name,
-  hand: [],
-  points: 0,
-});
+const initialState = { rooms: {}, channel: {}, user: "", game: "none" };
 
 // --------------------- ACTION TYPES ---------------------
 const GET_ALL_ROOMS = "GET_ALL_ROOMS";
+const CLEAR_CHANNEL = "CLEAR_CHANNEL";
+const SET_USER = "SET_USER";
 const ADD_NEW_ROOM = "ADD_NEW_ROOM";
 const JOIN_ROOM = "JOIN_ROOM";
+const LEAVE_ROOM = "LEAVE_ROOM";
+const REMOVE_USER = "REMOVE_USER";
 
 // --------------------- ACTION CREATORS ---------------------
 export const getAllRooms = (rooms) => ({
   type: GET_ALL_ROOMS,
   rooms,
+});
+export const clearChannel = () => ({
+  type: CLEAR_CHANNEL,
+  channel: {},
+});
+export const setUser = (user) => ({
+  type: SET_USER,
+  user,
 });
 export const addNewRoom = (roomId, players) => ({
   type: ADD_NEW_ROOM,
@@ -39,9 +40,18 @@ export const joinRoom = (roomId, channel, players) => ({
   channel,
   players,
 });
+export const leaveRoom = () => ({
+  type: LEAVE_ROOM,
+  user: "",
+  channel: {},
+});
+export const removeUser = (roomId, players) => ({
+  type: REMOVE_USER,
+  roomId,
+  players,
+});
 
 // --------------------- HELPER ---------------------
-
 export const actionSocket = async (roomObj) => {
   const { type } = roomObj;
 
@@ -64,10 +74,11 @@ export const getAllRoomsAPI = () => async (dispatch) => {
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_ALL_ROOMS:
-      return {
-        ...state,
-        rooms: action.rooms,
-      };
+      return { ...state, rooms: action.rooms };
+    case CLEAR_CHANNEL:
+      return { ...state, channel: action.channel };
+    case SET_USER:
+      return { ...state, user: action.user };
     case ADD_NEW_ROOM:
       return {
         ...state,
@@ -81,6 +92,16 @@ const reducer = (state = initialState, action) => {
           [action.roomId]: action.players,
         },
         channel: action.channel,
+      };
+    case LEAVE_ROOM:
+      return { ...state, channel: action.channel, user: action.user };
+    case REMOVE_USER:
+      return {
+        ...state,
+        channel: {
+          ...state.channel,
+          players: action.players,
+        },
       };
     default:
       return state;

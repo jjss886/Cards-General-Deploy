@@ -1,20 +1,23 @@
 let roomObjRef = {};
-const allTypes = {
-  NEW_ROOM: true,
-  CLEAR_ROOM: true,
-};
+const emitAll = {
+    NEW_ROOM: true,
+    CLEAR_ROOM: true,
+    LEAVE_ROOM: true,
+  },
+  emitSkip = {
+    JOIN_ROOM: true,
+  };
 
-// -------------------- API SERVER CALL --------------------
-const broadcast = (io, type, roomId, roomObj, object) => {
+// -------------------- 1. API SERVER --------------------
+const broadcast = (io, type, roomId, roomObj, actionObj) => {
   roomObjRef = roomObj;
 
-  // console.log("BROADCAST ROOM -", io.sockets.adapter.rooms);
-
-  if (allTypes[type]) io.emit(type, roomId, roomObj, object);
-  else io.to(roomId).emit(type, roomId, roomObj, object);
+  if (emitAll[type]) io.emit(type, roomId, roomObj, actionObj);
+  else if (!emitSkip[type])
+    io.to(roomId).emit(type, roomId, roomObj, actionObj);
 };
 
-// -------------------- DIRECT CLIENT CALL --------------------
+// -------------------- 2. DIRECT CLIENT --------------------
 const socketFn = (io) => {
   io.on("connection", (socket) => {
     console.log(`SERVER SOCKET CONNECTED: ${socket.id}`);
@@ -24,15 +27,21 @@ const socketFn = (io) => {
     });
 
     socket.on("NEW_ROOM", (roomObj) => {
-      socket.join(roomObj.roomId);
+      const { roomId } = roomObj;
+      socket.join(roomId);
 
-      io.to(roomObj.roomId).emit("JOIN_ROOM", roomObj.roomId, roomObjRef);
+      io.to(roomId).emit("JOIN_ROOM", roomId, roomObjRef);
     });
 
     socket.on("JOIN_ROOM", (roomObj) => {
-      socket.join(roomObj.roomId);
+      const { roomId } = roomObj;
+      socket.join(roomId);
 
-      io.to(roomObj.roomId).emit("JOIN_ROOM", roomObj.roomId, roomObjRef);
+      io.to(roomId).emit("JOIN_ROOM", roomId, roomObjRef);
+    });
+
+    socket.on("LEAVE_ROOM", (roomObj) => {
+      socket.leave(roomObj.roomId);
     });
 
     socket.on("ROOM_LOG", () =>
