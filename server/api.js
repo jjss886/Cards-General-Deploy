@@ -10,6 +10,7 @@ const initialChannel = (room, name) => ({
   room,
   host: name,
   players: { [name]: initialPlayer(name) },
+  messages: [],
   deck: [],
   table: [],
   trash: [],

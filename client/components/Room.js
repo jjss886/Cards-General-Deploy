@@ -27,6 +27,8 @@ class Room extends Component {
           Log Socket
         </button>
 
+        <ChatRoom />
+
         {players.map((p, i) => (
           <p key={i}>
             {i + 1}. {p.name} points: {p.points}
