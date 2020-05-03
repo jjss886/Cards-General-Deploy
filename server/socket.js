@@ -6,9 +6,9 @@ const allTypes = {
 
 // -------------------- API SERVER CALL --------------------
 const broadcast = (io, type, roomId, roomObj, object) => {
-  // console.log("BROADCAST ROOM -", io.sockets.adapter.rooms);
-
   roomObjRef = roomObj;
+
+  // console.log("BROADCAST ROOM -", io.sockets.adapter.rooms);
 
   if (allTypes[type]) io.emit(type, roomId, roomObj, object);
   else io.to(roomId).emit(type, roomId, roomObj, object);
@@ -26,19 +26,18 @@ const socketFn = (io) => {
     socket.on("NEW_ROOM", (roomObj) => {
       socket.join(roomObj.roomId);
 
-      // console.log("NEW ROOM SOCKET -- ", io.sockets.adapter.rooms, roomObjRef);
       io.to(roomObj.roomId).emit("JOIN_ROOM", roomObj.roomId, roomObjRef);
     });
 
     socket.on("JOIN_ROOM", (roomObj) => {
       socket.join(roomObj.roomId);
 
-      // console.log("JOIN ROOM SOCKET -- ", io.sockets.adapter.rooms, roomObjRef);
       io.to(roomObj.roomId).emit("JOIN_ROOM", roomObj.roomId, roomObjRef);
     });
 
     socket.on("ROOM_LOG", () =>
-      console.log("ROOM LOGGING -", Object.keys(socket.rooms))
+      // console.log("ROOM LOGGING -", Object.keys(socket.rooms))
+      console.log("ROOM LOGGING -", io.sockets.adapter.rooms)
     );
   });
 };

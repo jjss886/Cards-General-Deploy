@@ -22,8 +22,6 @@ socket.on("connect", () => {
   socket.on("CLEAR_ROOM", (roomId, roomObj) => {
     dispatch(getAllRooms(roomObj));
   });
-
-  socket.on("log", (roomId) => console.log("Log room: ", socket, roomId));
 });
 
 export const roomLog = () => socket.emit("ROOM_LOG");
