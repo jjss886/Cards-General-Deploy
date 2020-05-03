@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { actionSocket } from "../store";
 import { roomLog } from "../socket";
+import ChatRoom from "./ChatRoom";
 
 class Room extends Component {
   leaveRoom = () => {
