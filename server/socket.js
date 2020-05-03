@@ -2,17 +2,19 @@ let roomObjRef = {};
 const emitAll = {
     NEW_ROOM: true,
     CLEAR_ROOM: true,
+    LEAVE_ROOM: true,
   },
   emitSkip = {
     JOIN_ROOM: true,
   };
 
 // -------------------- 1. API SERVER --------------------
-const broadcast = (io, type, roomId, roomObj, object) => {
+const broadcast = (io, type, roomId, roomObj, actionObj) => {
   roomObjRef = roomObj;
 
-  if (emitAll[type]) io.emit(type, roomId, roomObj, object);
-  else if (!emitSkip[type]) io.to(roomId).emit(type, roomId, roomObj, object);
+  if (emitAll[type]) io.emit(type, roomId, roomObj, actionObj);
+  else if (!emitSkip[type])
+    io.to(roomId).emit(type, roomId, roomObj, actionObj);
 };
 
 // -------------------- 2. DIRECT CLIENT --------------------
@@ -25,17 +27,17 @@ const socketFn = (io) => {
     });
 
     socket.on("NEW_ROOM", (roomObj) => {
-      const { roomId, name } = roomObj;
+      const { roomId } = roomObj;
       socket.join(roomId);
 
-      io.to(roomId).emit("JOIN_ROOM", roomId, roomObjRef, name);
+      io.to(roomId).emit("JOIN_ROOM", roomId, roomObjRef);
     });
 
     socket.on("JOIN_ROOM", (roomObj) => {
-      const { roomId, name } = roomObj;
+      const { roomId } = roomObj;
       socket.join(roomId);
 
-      io.to(roomId).emit("JOIN_ROOM", roomId, roomObjRef, name);
+      io.to(roomId).emit("JOIN_ROOM", roomId, roomObjRef);
     });
 
     socket.on("LEAVE_ROOM", (roomObj) => {
