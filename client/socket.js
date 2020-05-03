@@ -47,15 +47,9 @@ socket.on("connect", () => {
 
     if (stateUser === actionObj.name) dispatch(leaveRoom());
     else {
-      const channel = { ...roomObj[roomId] };
+      const channel = roomObj[roomId];
 
-      if (channel) {
-        const curPlayers = { ...channel.players };
-
-        delete curPlayers[actionObj.name];
-
-        dispatch(removeUser(roomId, curPlayers, channel.host));
-      }
+      if (channel) dispatch(removeUser(roomId, channel.players, channel.host));
     }
   });
 
