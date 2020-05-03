@@ -3,16 +3,11 @@ import { render } from "react-dom";
 import { Router, Route, Switch } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store";
-import { createMemoryHistory, createBrowserHistory } from "history";
+import history from "./history";
 
 import "./utils/style.css";
 import Home from "./components/Home";
 import Room from "./components/Room";
-
-const history =
-  process.env.NODE_ENV === "test"
-    ? createMemoryHistory()
-    : createBrowserHistory();
 
 const Routes = () => (
   <Switch>

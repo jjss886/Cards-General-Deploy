@@ -1,4 +1,5 @@
 import io from "socket.io-client";
+import history from "./history";
 import store, {
   getAllRooms,
   leaveRoom,
@@ -10,12 +11,11 @@ import store, {
 const socket = io(window.location.origin);
 
 // -------------------- HELPER FUNCTIONS --------------------
-const roomState = (roomObj) => {
-  return Object.keys(roomObj).reduce((a, v) => {
+const roomState = (roomObj) =>
+  Object.keys(roomObj).reduce((a, v) => {
     a[v] = Object.keys(roomObj[v].players);
     return a;
   }, {});
-};
 
 // -------------------- SOCKET ACTIONS --------------------
 socket.on("connect", () => {
@@ -55,6 +55,8 @@ socket.on("connect", () => {
   socket.on("CLEAR_ROOM", (roomId, roomObj) => {
     const rooms = roomState(roomObj);
     dispatch(getAllRooms(rooms));
+    dispatch(leaveRoom());
+    history.push("/");
   });
 });
 
