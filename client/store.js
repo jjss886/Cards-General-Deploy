@@ -41,7 +41,6 @@ export const joinRoom = (roomId, channel, players) => ({
 });
 
 // --------------------- HELPER ---------------------
-
 export const actionSocket = async (roomObj) => {
   const { type } = roomObj;
 

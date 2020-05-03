@@ -14,7 +14,7 @@ socket.on("connect", () => {
   });
 
   socket.on("JOIN_ROOM", (roomId, roomObj) => {
-    console.log("Joined room: ", roomObj[roomId].players);
+    console.log("Join Room Socket - ", roomObj[roomId]);
     const channel = roomObj[roomId];
     dispatch(joinRoom(roomId, channel, Object.keys(channel.players)));
   });

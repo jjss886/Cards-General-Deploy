@@ -4,7 +4,7 @@ const allTypes = {
   CLEAR_ROOM: true,
 };
 
-// -------------------- API SERVER CALL --------------------
+// -------------------- API SERVER FIRST --------------------
 const broadcast = (io, type, roomId, roomObj, object) => {
   roomObjRef = roomObj;
 
@@ -14,7 +14,7 @@ const broadcast = (io, type, roomId, roomObj, object) => {
   else io.to(roomId).emit(type, roomId, roomObj, object);
 };
 
-// -------------------- DIRECT CLIENT CALL --------------------
+// -------------------- DIRECT CLIENT SECOND --------------------
 const socketFn = (io) => {
   io.on("connection", (socket) => {
     console.log(`SERVER SOCKET CONNECTED: ${socket.id}`);
