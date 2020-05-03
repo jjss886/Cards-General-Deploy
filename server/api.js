@@ -50,10 +50,8 @@ const updateRoom = (roomId, action) => {
 
         if (curNames.length === 1) delete roomObj[roomId];
         else {
-          if (channel.host === name) {
-            console.log("INSIDE --", curNames, channel.host);
+          if (channel.host === name)
             channel.host = curNames.filter((x) => x !== name)[0];
-          }
 
           delete curPlayers[name];
         }
