@@ -45,10 +45,11 @@ export const leaveRoom = () => ({
   user: "",
   channel: {},
 });
-export const removeUser = (roomId, players) => ({
+export const removeUser = (roomId, players, host) => ({
   type: REMOVE_USER,
   roomId,
   players,
+  host,
 });
 
 // --------------------- HELPER ---------------------
@@ -100,6 +101,7 @@ const reducer = (state = initialState, action) => {
         ...state,
         channel: {
           ...state.channel,
+          host: action.host,
           players: action.players,
         },
       };

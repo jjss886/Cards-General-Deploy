@@ -41,15 +41,22 @@ socket.on("connect", () => {
 
     dispatch(getAllRooms(rooms));
 
-    const curPlayers = { ...roomObj[roomId].players },
-      stateUser = getState().user;
+    const stateUser = getState().user;
 
     console.log("Leave Room Socket -", roomId, roomObj, actionObj, stateUser);
 
-    delete curPlayers[actionObj.name];
-
     if (stateUser === actionObj.name) dispatch(leaveRoom());
-    else dispatch(removeUser(roomId, curPlayers));
+    else {
+      const channel = { ...roomObj[roomId] };
+
+      if (channel) {
+        const curPlayers = { ...channel.players };
+
+        delete curPlayers[actionObj.name];
+
+        dispatch(removeUser(roomId, curPlayers, channel.host));
+      }
+    }
   });
 
   socket.on("CLEAR_ROOM", (roomId, roomObj) => {
