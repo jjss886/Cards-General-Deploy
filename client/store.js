@@ -41,16 +41,13 @@ export const joinRoom = (roomId, channel, players) => ({
 });
 
 // --------------------- HELPER ---------------------
-const allTypes = {
-  // NEW_ROOM: true,
-};
 
 export const actionSocket = async (roomObj) => {
   const { type } = roomObj;
 
   await axios.post("/room-action", { action: roomObj });
 
-  if (!allTypes[type]) socket.emit(type, roomObj);
+  socket.emit(type, roomObj);
 };
 
 // --------------------- THUNKS ---------------------

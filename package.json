@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "General Deck of Cards",
   "scripts": {
-    "build-client": "webpack",
-    "build-client-watch": "webpack -w",
+    "web": "webpack",
+    "web-watch": "webpack -w",
     "start-server": "nodemon server -e html,js,scss --ignore public --ignore client",
-    "start-dev": "NODE_ENV='development' npm run build-client-watch & NODE_ENV='development' npm run start-server",
+    "start-dev": "NODE_ENV='development' npm run web-watch & NODE_ENV='development' npm run start-server",
     "start": "node server",
     "deploy": "script/deploy"
   },

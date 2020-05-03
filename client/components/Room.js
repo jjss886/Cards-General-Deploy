@@ -5,7 +5,7 @@ import { roomLog } from "../socket";
 class Room extends Component {
   render() {
     const { channel, history } = this.props,
-      players = channel.players ? Object.keys(channel.players) : [];
+      players = channel.players ? Object.values(channel.players) : [];
 
     return (
       <div className="mainDiv">
@@ -21,7 +21,7 @@ class Room extends Component {
 
         {players.map((p, i) => (
           <p key={i}>
-            {i + 1}. {p}
+            {i + 1}. {p.name} points: {p.points}
           </p>
         ))}
       </div>
@@ -29,6 +29,6 @@ class Room extends Component {
   }
 }
 
-const mapState = (state) => ({ rooms: state.rooms, channel: state.channel });
+const mapState = (state) => ({ channel: state.channel });
 
 export default connect(mapState)(Room);
