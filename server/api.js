@@ -25,14 +25,27 @@ let roomObj = { ...initialRoom };
 const updateRoom = (roomId, action) => {
   switch (action.type) {
     case "NEW_ROOM":
-      roomObj[roomId] = initialChannel(roomId, action.name);
+      {
+        roomObj[roomId] = initialChannel(roomId, action.name);
+      }
       break;
     case "JOIN_ROOM":
-      const targetPlayers = roomObj[roomId].players;
-      targetPlayers[action.name] = initialPlayer(action.name);
+      {
+        const targetPlayers = roomObj[roomId].players;
+        targetPlayers[action.name] = initialPlayer(action.name);
+      }
       break;
     case "CLEAR_ROOM":
-      roomObj = { ...initialRoom };
+      {
+        roomObj = { ...initialRoom };
+      }
+      break;
+    case "LEAVE_ROOM":
+      {
+        const targetPlayers = roomObj[roomId].players;
+        // delete action.name in targetPlayers;
+        delete targetPlayers[action.name];
+      }
       break;
     default:
       break;

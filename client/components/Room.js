@@ -5,8 +5,9 @@ import { roomLog } from "../socket";
 
 class Room extends Component {
   leaveRoom = () => {
-    actionSocket({ type: "LEAVE_ROOM" });
-    this.props.history.push("/");
+    const { user, channel, history } = this.props;
+    actionSocket({ type: "LEAVE_ROOM", roomId: channel.room, name: user });
+    history.push("/");
   };
 
   render() {
@@ -35,6 +36,6 @@ class Room extends Component {
   }
 }
 
-const mapState = (state) => ({ channel: state.channel });
+const mapState = (state) => ({ user: state.user, channel: state.channel });
 
 export default connect(mapState)(Room);
