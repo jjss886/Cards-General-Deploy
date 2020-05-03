@@ -1,8 +1,11 @@
 let roomObjRef = {};
-const allTypes = {
-  NEW_ROOM: true,
-  CLEAR_ROOM: true,
-};
+const emitAll = {
+    NEW_ROOM: true,
+    CLEAR_ROOM: true,
+  },
+  emitSkip = {
+    JOIN_ROOM: true,
+  };
 
 // -------------------- API SERVER FIRST --------------------
 const broadcast = (io, type, roomId, roomObj, object) => {
@@ -10,8 +13,8 @@ const broadcast = (io, type, roomId, roomObj, object) => {
 
   // console.log("BROADCAST ROOM -", io.sockets.adapter.rooms);
 
-  if (allTypes[type]) io.emit(type, roomId, roomObj, object);
-  else io.to(roomId).emit(type, roomId, roomObj, object);
+  if (emitAll[type]) io.emit(type, roomId, roomObj, object);
+  else if (!emitSkip[type]) io.to(roomId).emit(type, roomId, roomObj, object);
 };
 
 // -------------------- DIRECT CLIENT SECOND --------------------
