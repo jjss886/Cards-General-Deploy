@@ -5,9 +5,10 @@ import axios from "axios";
 import socket from "./socket";
 
 // --------------------- INITIAL STATE ---------------------
-const initialState = { rooms: {}, channel: {} };
+const initialState = { rooms: {}, channel: {}, user: "" };
 const initialChannel = (room, name) => ({
   room,
+  host: name,
   players: { [name]: initialPlayer(name) },
   deck: [],
   table: [],
@@ -33,11 +34,12 @@ export const addNewRoom = (roomId, players) => ({
   roomId,
   players,
 });
-export const joinRoom = (roomId, channel, players) => ({
+export const joinRoom = (roomId, channel, players, name) => ({
   type: JOIN_ROOM,
   roomId,
   channel,
   players,
+  name,
 });
 
 // --------------------- HELPER ---------------------
@@ -80,6 +82,7 @@ const reducer = (state = initialState, action) => {
           [action.roomId]: action.players,
         },
         channel: action.channel,
+        user: action.name,
       };
     default:
       return state;

@@ -13,10 +13,10 @@ socket.on("connect", () => {
     dispatch(addNewRoom(roomId, Object.keys(roomObj[roomId].players)));
   });
 
-  socket.on("JOIN_ROOM", (roomId, roomObj) => {
+  socket.on("JOIN_ROOM", (roomId, roomObj, name) => {
     console.log("Join Room Socket - ", roomObj[roomId]);
     const channel = roomObj[roomId];
-    dispatch(joinRoom(roomId, channel, Object.keys(channel.players)));
+    dispatch(joinRoom(roomId, channel, Object.keys(channel.players), name));
   });
 
   socket.on("CLEAR_ROOM", (roomId, roomObj) => {

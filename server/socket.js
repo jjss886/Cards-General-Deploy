@@ -27,15 +27,17 @@ const socketFn = (io) => {
     });
 
     socket.on("NEW_ROOM", (roomObj) => {
-      socket.join(roomObj.roomId);
+      const { roomId, name } = roomObj;
+      socket.join(roomId);
 
-      io.to(roomObj.roomId).emit("JOIN_ROOM", roomObj.roomId, roomObjRef);
+      io.to(roomId).emit("JOIN_ROOM", roomId, roomObjRef, name);
     });
 
     socket.on("JOIN_ROOM", (roomObj) => {
-      socket.join(roomObj.roomId);
+      const { roomId, name } = roomObj;
+      socket.join(roomId);
 
-      io.to(roomObj.roomId).emit("JOIN_ROOM", roomObj.roomId, roomObjRef);
+      io.to(roomId).emit("JOIN_ROOM", roomId, roomObjRef, name);
     });
 
     socket.on("ROOM_LOG", () =>
