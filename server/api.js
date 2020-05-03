@@ -42,9 +42,18 @@ const updateRoom = (roomId, action) => {
       break;
     case "LEAVE_ROOM":
       {
-        const targetPlayers = roomObj[roomId].players;
-        // delete action.name in targetPlayers;
-        delete targetPlayers[action.name];
+        const { name } = action,
+          channel = roomObj[roomId],
+          { host } = channel,
+          curPlayers = channel.players,
+          curNames = Object.keys(curPlayers);
+
+        if (curNames.length === 1) delete channel;
+        else {
+          if (host === name) host = curNames.filter((x) => x !== name)[0];
+
+          delete curPlayers[name];
+        }
       }
       break;
     default:
