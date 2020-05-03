@@ -4,7 +4,7 @@ import store, { getAllRooms, addNewRoom, joinRoom } from "./store";
 const socket = io(window.location.origin);
 
 socket.on("connect", () => {
-  console.log("I am now connected to the server!", socket);
+  console.log("I am now connected to the server!");
 
   const { dispatch, getState } = store;
 

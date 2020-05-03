@@ -11,8 +11,6 @@ const emitAll = {
 const broadcast = (io, type, roomId, roomObj, object) => {
   roomObjRef = roomObj;
 
-  // console.log("BROADCAST ROOM -", io.sockets.adapter.rooms);
-
   if (emitAll[type]) io.emit(type, roomId, roomObj, object);
   else if (!emitSkip[type]) io.to(roomId).emit(type, roomId, roomObj, object);
 };

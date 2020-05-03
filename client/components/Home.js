@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { channelOption } from "../utils/utilities";
-// import { getAllRooms, addNewRoom, joinRoom, actionSocket } from "../store";
 import { getAllRoomsAPI, actionSocket } from "../store";
 
 class Home extends Component {
@@ -15,7 +14,7 @@ class Home extends Component {
   }
 
   roomCreate = async () => {
-    const { history, rooms, addNewRoom } = this.props,
+    const { history, rooms } = this.props,
       { name } = this.state;
 
     if (!name.length) return alert("Please fill in name");
@@ -29,10 +28,7 @@ class Home extends Component {
       }
 
       if (!(roomId in rooms)) {
-        // addNewRoom({ type: "NEW_ROOM", roomId, name });
-
         actionSocket({ type: "NEW_ROOM", roomId, name });
-        // actionSocket({ type: "JOIN_ROOM", roomId, name });
 
         history.push(`/Room/${roomId}`);
 
@@ -49,15 +45,12 @@ class Home extends Component {
     evt.preventDefault();
 
     const { roomId, name } = this.state,
-      { history, rooms, joinRoom } = this.props;
+      { history, rooms } = this.props;
 
     if (!name.length) return alert("Please fill in name");
 
-    // if (rooms.has(roomId)) {
     if (roomId in rooms) {
       if (!rooms[roomId].includes(name)) {
-        // joinRoom({ type: "JOIN_ROOM", roomId, name });
-
         actionSocket({ type: "JOIN_ROOM", roomId, name });
 
         history.push(`/Room/${roomId}`);
@@ -115,8 +108,6 @@ const mapState = (state) => ({ rooms: state.rooms });
 
 const mapDispatch = (dispatch) => ({
   getAllRoomsAPI: () => dispatch(getAllRoomsAPI()),
-  // addNewRoom: (roomObj) => dispatch(addNewRoom(roomObj)),
-  // joinRoom: (roomObj) => dispatch(joinRoom(roomObj)),
 });
 
 export default connect(mapState, mapDispatch)(Home);

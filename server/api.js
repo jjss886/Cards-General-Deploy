@@ -31,8 +31,8 @@ const updateRoom = (roomId, action) => {
       break;
     case "JOIN_ROOM":
       {
-        const targetPlayers = roomObj[roomId].players;
-        targetPlayers[action.name] = initialPlayer(action.name);
+        const curPlayers = roomObj[roomId].players;
+        curPlayers[action.name] = initialPlayer(action.name);
       }
       break;
     case "CLEAR_ROOM":
