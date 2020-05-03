@@ -7,7 +7,7 @@ const emitAll = {
     JOIN_ROOM: true,
   };
 
-// -------------------- API SERVER FIRST --------------------
+// -------------------- 1. API SERVER --------------------
 const broadcast = (io, type, roomId, roomObj, object) => {
   roomObjRef = roomObj;
 
@@ -17,7 +17,7 @@ const broadcast = (io, type, roomId, roomObj, object) => {
   else if (!emitSkip[type]) io.to(roomId).emit(type, roomId, roomObj, object);
 };
 
-// -------------------- DIRECT CLIENT SECOND --------------------
+// -------------------- 2. DIRECT CLIENT --------------------
 const socketFn = (io) => {
   io.on("connection", (socket) => {
     console.log(`SERVER SOCKET CONNECTED: ${socket.id}`);
@@ -38,6 +38,10 @@ const socketFn = (io) => {
       socket.join(roomId);
 
       io.to(roomId).emit("JOIN_ROOM", roomId, roomObjRef, name);
+    });
+
+    socket.on("LEAVE_ROOM", (roomObj) => {
+      socket.leave(roomObj.roomId);
     });
 
     socket.on("ROOM_LOG", () =>
