@@ -15,6 +15,7 @@ const ADD_NEW_ROOM = "ADD_NEW_ROOM";
 const JOIN_ROOM = "JOIN_ROOM";
 const LEAVE_ROOM = "LEAVE_ROOM";
 const REMOVE_USER = "REMOVE_USER";
+const POST_MSG = "POST_MSG";
 
 // --------------------- ACTION CREATORS ---------------------
 export const getAllRooms = (rooms) => ({

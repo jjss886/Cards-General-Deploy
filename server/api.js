@@ -58,6 +58,14 @@ const updateRoom = (roomId, action) => {
         }
       }
       break;
+    case "POST_MSG":
+      {
+        const channel = roomObj[roomId];
+        channel.messages = channel.messages
+          .slice(-29)
+          .concat({ name: action.name, message: action.message });
+      }
+      break;
     default:
       break;
   }

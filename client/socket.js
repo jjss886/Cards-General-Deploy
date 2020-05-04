@@ -59,6 +59,8 @@ socket.on("connect", () => {
     dispatch(leaveRoom());
     history.push("/");
   });
+
+  socket.on("POST_MSG", (roomId, roomObj, actionObj) => {});
 });
 
 export const roomLog = () => socket.emit("ROOM_LOG");

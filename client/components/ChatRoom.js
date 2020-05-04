@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { actionSocket } from "../store";
 
 class ChatRoom extends Component {
   constructor() {
@@ -16,35 +17,51 @@ class ChatRoom extends Component {
   handleSubmit = (evt) => {
     evt.preventDefault();
 
-    const { message } = this.state;
+    const { message } = this.state,
+      { user, roomId } = this.props;
 
     if (message.length) {
       // NEED TO SEND MESSAGE BACK TO REDUX & SOCKET
+      actionSocket({ type: "POST_MSG", roomId, name: user, message });
 
       this.setState({ message: "" });
     }
   };
 
   render() {
+    const { messages } = this.props;
+
     return (
       <div>
         <h3>Chat Room</h3>
 
-        <input
-          name="message"
-          value={this.state.message}
-          onChange={this.handleChange}
-          placeholder="Message"
-        />
+        {messages.map((m, i) => {
+          <p key={i}>
+            {m.name}: {m.message}
+          </p>;
+        })}
 
-        <button type="button" onClick={this.handleSubmit}>
-          Send
-        </button>
+        <div>
+          <input
+            name="message"
+            value={this.state.message}
+            onChange={this.handleChange}
+            placeholder="Message"
+          />
+
+          <button type="button" onClick={this.handleSubmit}>
+            Send
+          </button>
+        </div>
       </div>
     );
   }
 }
 
-const mapState = (state) => ({ channel: state.channel });
+const mapState = (state) => ({
+  user: state.user,
+  roomId: state.channel.room,
+  messages: state.channel.messages,
+});
 
 export default connect(mapState)(ChatRoom);
