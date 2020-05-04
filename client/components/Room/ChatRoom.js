@@ -21,7 +21,6 @@ class ChatRoom extends Component {
       { user, roomId } = this.props;
 
     if (message.length) {
-      // NEED TO SEND MESSAGE BACK TO REDUX & SOCKET
       actionSocket({ type: "POST_MSG", roomId, name: user, message });
 
       this.setState({ message: "" });
@@ -39,7 +38,7 @@ class ChatRoom extends Component {
           {messages
             ? messages.map((m, i) => (
                 <p key={i} className={`chatMsg ${i % 2 ? "chatMsg1" : null}`}>
-                  <u>{m.name}</u>: {m.message}
+                  {m.name ? `${(<u>{m.name}</u>)}:` : null} {m.message}
                 </p>
               ))
             : null}

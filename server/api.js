@@ -52,6 +52,10 @@ const updateRoom = (roomId, action) => {
           curPlayers = channel.players,
           curNames = Object.keys(curPlayers);
 
+        channel.messages = channel.messages
+          .slice(1 - msgLen)
+          .concat({ name: "", message: `${name} has left the room!` });
+
         if (curNames.length === 1) delete roomObj[roomId];
         else {
           if (channel.host === name)

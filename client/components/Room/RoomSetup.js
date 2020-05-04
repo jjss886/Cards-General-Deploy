@@ -1,23 +1,30 @@
-import React from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 
-const RoomSetup = ({ channel }) => {
-  const players = channel.players ? Object.values(channel.players) : [];
+class RoomSetup extends Component {
+  constructor() {
+    super();
+    this.state = { mode: "none" };
+  }
 
-  return (
-    <div className="roomSetupDiv">
-      <p>
-        <u>Host</u>: {channel.host}
-      </p>
+  render() {
+    const players = channel.players ? Object.values(channel.players) : [];
 
-      {players.map((p, i) => (
-        <p key={i}>
-          {i + 1}. {p.name} points: {p.points}
+    return (
+      <div className="roomSetupDiv">
+        <p>
+          <u>Host</u>: {channel.host}
         </p>
-      ))}
-    </div>
-  );
-};
+
+        {players.map((p, i) => (
+          <p key={i}>
+            {i + 1}. {p.name} points: {p.points}
+          </p>
+        ))}
+      </div>
+    );
+  }
+}
 
 const mapState = (state) => ({ channel: state.channel });
 
