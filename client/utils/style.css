@@ -78,7 +78,7 @@ p {
 }
 /* #endregion */
 
-/* #region ------------------ CARD ELEMENT ------------------ */
+/* #region ------------------ SINGLE CARD ------------------ */
 .cardDiv {
   height: 70px;
   width: 50px;
@@ -121,4 +121,12 @@ p {
   font-size: 18px;
   color: black;
 }
+/* #endregion  */
+
+/* #region ------------------ CHAT ROOM ------------------ */
+
+.chatInputDiv {
+  display: flex;
+}
+
 /* #endregion  */

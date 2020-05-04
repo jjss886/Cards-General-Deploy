@@ -35,13 +35,13 @@ class ChatRoom extends Component {
       <div>
         <h3>Chat Room</h3>
 
-        {messages.map((m, i) => {
+        {messages.map((m, i) => (
           <p key={i}>
             {m.name}: {m.message}
-          </p>;
-        })}
+          </p>
+        ))}
 
-        <div>
+        <div className="chatInputDiv">
           <input
             name="message"
             value={this.state.message}
@@ -49,7 +49,7 @@ class ChatRoom extends Component {
             placeholder="Message"
           />
 
-          <button type="button" onClick={this.handleSubmit}>
+          <button type="button" onClick={this.handleSubmit} className="gBtn">
             Send
           </button>
         </div>
