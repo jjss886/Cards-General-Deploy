@@ -47,10 +47,10 @@ socket.on("connect", () => {
     console.log("Leave Room Socket -", roomId, roomObj, actionObj, stateUser);
 
     if (stateUser === actionObj.name) dispatch(leaveRoom());
-    else {
-      const channel = roomObj[roomId];
+    else if (roomObj[roomId]) {
+      const { players, host, messages } = roomObj[roomId];
 
-      if (channel) dispatch(removeUser(roomId, channel.players, channel.host));
+      dispatch(removeUser(roomId, players, host, messages));
     }
   });
 
