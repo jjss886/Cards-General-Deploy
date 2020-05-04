@@ -36,11 +36,22 @@ class ChatRoom extends Component {
 
         <div className="chatMsgDiv">
           {messages
-            ? messages.map((m, i) => (
-                <p key={i} className={`chatMsg ${i % 2 ? "chatMsg1" : null}`}>
-                  {m.name ? `${(<u>{m.name}</u>)}:` : null} {m.message}
-                </p>
-              ))
+            ? messages.map((m, i) =>
+                m.name ? (
+                  <p key={i} className={`chatMsg ${i % 2 ? "chatMsg1" : null}`}>
+                    {m.name}: {m.message}
+                  </p>
+                ) : (
+                  <p
+                    key={i}
+                    className={`chatMsg ${
+                      i % 2 ? "chatMsg1" : null
+                    } chatLeaveMsg`}
+                  >
+                    {m.message}
+                  </p>
+                )
+              )
             : null}
         </div>
 
