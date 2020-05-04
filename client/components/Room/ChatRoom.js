@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { actionSocket } from "../store";
+import { actionSocket } from "../../store";
 
 class ChatRoom extends Component {
   constructor() {
@@ -32,17 +32,22 @@ class ChatRoom extends Component {
     const { messages } = this.props;
 
     return (
-      <div>
+      <div className="chatFullDiv">
         <h3>Chat Room</h3>
 
-        {messages.map((m, i) => (
-          <p key={i}>
-            {m.name}: {m.message}
-          </p>
-        ))}
+        <div className="chatMsgDiv">
+          {messages
+            ? messages.map((m, i) => (
+                <p key={i} className={`chatMsg ${i % 2 ? "chatMsg1" : null}`}>
+                  <u>{m.name}</u>: {m.message}
+                </p>
+              ))
+            : null}
+        </div>
 
         <div className="chatInputDiv">
-          <input
+          <textarea
+            className="chatTextArea"
             name="message"
             value={this.state.message}
             onChange={this.handleChange}

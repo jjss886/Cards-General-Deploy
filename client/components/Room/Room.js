@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { actionSocket } from "../store";
-import { roomLog } from "../socket";
+import { actionSocket } from "../../store";
+import { roomLog } from "../../socket";
 import ChatRoom from "./ChatRoom";
+import RoomSetup from "./RoomSetup";
 
 class Room extends Component {
   leaveRoom = () => {
@@ -12,28 +13,27 @@ class Room extends Component {
   };
 
   render() {
-    const { channel } = this.props,
-      players = channel.players ? Object.values(channel.players) : [];
+    const { channel } = this.props;
 
     return (
       <div className="mainDiv">
         <h3>Welcome to room: {channel.room}</h3>
 
-        <button type="button" onClick={this.leaveRoom} className="gBtn">
-          Leave
-        </button>
+        <div className="roomFlexDiv">
+          <button type="button" onClick={this.leaveRoom} className="gBtn">
+            Leave
+          </button>
 
-        <button type="button" onClick={roomLog}>
-          Log Socket
-        </button>
+          <button type="button" onClick={roomLog} className="gBtn">
+            Log Socket
+          </button>
+        </div>
 
-        <ChatRoom />
+        <div className="roomFlexDiv">
+          <RoomSetup />
 
-        {players.map((p, i) => (
-          <p key={i}>
-            {i + 1}. {p.name} points: {p.points}
-          </p>
-        ))}
+          <ChatRoom />
+        </div>
       </div>
     );
   }

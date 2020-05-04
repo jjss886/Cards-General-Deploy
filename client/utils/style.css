@@ -78,6 +78,63 @@ p {
 }
 /* #endregion */
 
+/* #region ------------------ ROOM ------------------ */
+.roomFlexDiv {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+/* #endregion  */
+
+/* #region ------------------ ROOM SETUP ------------------ */
+.roomSetupDiv {
+  width: 200px;
+  padding: 10px;
+  margin-right: 15px;
+  border: 1px solid black;
+  overflow-y: auto;
+}
+
+/* #endregion  */
+
+/* #region ------------------ CHAT ROOM ------------------ */
+.chatFullDiv {
+  width: 300px;
+  padding: 5px;
+  border: 1px solid black;
+}
+
+.chatMsgDiv {
+  min-height: 50px;
+  max-height: 115px;
+  overflow-y: auto;
+  padding: 5px;
+  border: 1px solid black;
+  border-radius: 3px;
+  margin-bottom: 5px;
+}
+
+.chatMsg {
+  padding: 5px;
+  border-radius: 3px;
+}
+
+.chatMsg1 {
+  background-color: rgba(234, 234, 234, 1);
+}
+
+.chatInputDiv {
+  display: flex;
+  justify-content: space-between;
+}
+
+.chatTextArea {
+  height: 20px;
+  border-radius: 2px;
+}
+
+/* #endregion  */
+
 /* #region ------------------ SINGLE CARD ------------------ */
 .cardDiv {
   height: 70px;
@@ -121,12 +178,4 @@ p {
   font-size: 18px;
   color: black;
 }
-/* #endregion  */
-
-/* #region ------------------ CHAT ROOM ------------------ */
-
-.chatInputDiv {
-  display: flex;
-}
-
 /* #endregion  */
