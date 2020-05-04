@@ -15,6 +15,7 @@ const ADD_NEW_ROOM = "ADD_NEW_ROOM";
 const JOIN_ROOM = "JOIN_ROOM";
 const LEAVE_ROOM = "LEAVE_ROOM";
 const REMOVE_USER = "REMOVE_USER";
+const POST_MSG = "POST_MSG";
 
 // --------------------- ACTION CREATORS ---------------------
 export const getAllRooms = (rooms) => ({
@@ -45,10 +46,15 @@ export const leaveRoom = () => ({
   user: "",
   channel: {},
 });
-export const removeUser = (roomId, players) => ({
+export const removeUser = (roomId, players, host) => ({
   type: REMOVE_USER,
   roomId,
   players,
+  host,
+});
+export const postMsg = (messages) => ({
+  type: POST_MSG,
+  messages,
 });
 
 // --------------------- HELPER ---------------------
@@ -100,7 +106,16 @@ const reducer = (state = initialState, action) => {
         ...state,
         channel: {
           ...state.channel,
+          host: action.host,
           players: action.players,
+        },
+      };
+    case POST_MSG:
+      return {
+        ...state,
+        channel: {
+          ...state.channel,
+          messages: action.messages,
         },
       };
     default:

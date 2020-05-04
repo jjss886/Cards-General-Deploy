@@ -1,21 +1,22 @@
 import io from "socket.io-client";
+import history from "./history";
 import store, {
   getAllRooms,
   leaveRoom,
   addNewRoom,
   joinRoom,
   removeUser,
+  postMsg,
 } from "./store";
 
 const socket = io(window.location.origin);
 
 // -------------------- HELPER FUNCTIONS --------------------
-const roomState = (roomObj) => {
-  return Object.keys(roomObj).reduce((a, v) => {
+const roomState = (roomObj) =>
+  Object.keys(roomObj).reduce((a, v) => {
     a[v] = Object.keys(roomObj[v].players);
     return a;
   }, {});
-};
 
 // -------------------- SOCKET ACTIONS --------------------
 socket.on("connect", () => {
@@ -41,20 +42,29 @@ socket.on("connect", () => {
 
     dispatch(getAllRooms(rooms));
 
-    const curPlayers = { ...roomObj[roomId].players },
-      stateUser = getState().user;
+    const stateUser = getState().user;
 
     console.log("Leave Room Socket -", roomId, roomObj, actionObj, stateUser);
 
-    delete curPlayers[actionObj.name];
-
     if (stateUser === actionObj.name) dispatch(leaveRoom());
-    else dispatch(removeUser(roomId, curPlayers));
+    else {
+      const channel = roomObj[roomId];
+
+      if (channel) dispatch(removeUser(roomId, channel.players, channel.host));
+    }
   });
 
   socket.on("CLEAR_ROOM", (roomId, roomObj) => {
     const rooms = roomState(roomObj);
     dispatch(getAllRooms(rooms));
+    dispatch(leaveRoom());
+    history.push("/");
+  });
+
+  socket.on("POST_MSG", (roomId, roomObj) => {
+    const { messages } = roomObj[roomId];
+
+    dispatch(postMsg(messages));
   });
 });
 

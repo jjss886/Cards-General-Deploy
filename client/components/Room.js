@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { actionSocket } from "../store";
 import { roomLog } from "../socket";
+import ChatRoom from "./ChatRoom";
 
 class Room extends Component {
   leaveRoom = () => {
@@ -25,6 +26,8 @@ class Room extends Component {
         <button type="button" onClick={roomLog}>
           Log Socket
         </button>
+
+        <ChatRoom />
 
         {players.map((p, i) => (
           <p key={i}>
