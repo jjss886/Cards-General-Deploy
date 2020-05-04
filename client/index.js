@@ -7,7 +7,7 @@ import history from "./history";
 
 import "./utils/style.css";
 import Home from "./components/Home";
-import Room from "./components/Room";
+import Room from "./components/Room/Room";
 
 const Routes = () => (
   <Switch>

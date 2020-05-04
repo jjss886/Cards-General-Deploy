@@ -44,10 +44,18 @@ const socketFn = (io) => {
       socket.leave(roomObj.roomId);
     });
 
-    socket.on("ROOM_LOG", () =>
+    socket.on("ROOM_LOG", () => {
+      const rooms = io.sockets.adapter.rooms,
+        roomsLog = Object.keys(rooms).reduce((a, v) => {
+          if (v.length === 4) a[v] = Object.keys(rooms[v].sockets);
+          // a[v] = Object.keys(rooms[v].sockets);
+
+          return a;
+        }, {});
+
       // console.log("ROOM LOGGING -", Object.keys(socket.rooms))
-      console.log("ROOM LOGGING -", io.sockets.adapter.rooms)
-    );
+      console.log("ROOM LOGGING -", roomsLog);
+    });
   });
 };
 

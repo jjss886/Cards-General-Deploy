@@ -5,7 +5,7 @@ let io;
 const ioVariable = (x) => (io = x);
 module.exports = { router, ioVariable };
 
-// ------------------- VARIABLE SETUP -------------------
+// ------------------- STATE SETUP -------------------
 const initialChannel = (room, name) => ({
   room,
   host: name,
@@ -23,7 +23,10 @@ const initialPlayer = (name) => ({
 const initialRoom = { ABCD: initialChannel("ABCD", "Bob") };
 let roomObj = { ...initialRoom };
 
-// ------------------- HELPER -------------------
+// ------------------- VARIABLE TRIGGERS -------------------
+const msgLen = 30;
+
+// ------------------- SOCKET REDUCER -------------------
 const updateRoom = (roomId, action) => {
   switch (action.type) {
     case "NEW_ROOM":
@@ -62,7 +65,7 @@ const updateRoom = (roomId, action) => {
       {
         const channel = roomObj[roomId];
         channel.messages = channel.messages
-          .slice(-29)
+          .slice(1 - msgLen)
           .concat({ name: action.name, message: action.message });
       }
       break;
