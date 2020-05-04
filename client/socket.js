@@ -6,6 +6,7 @@ import store, {
   addNewRoom,
   joinRoom,
   removeUser,
+  postMsg,
 } from "./store";
 
 const socket = io(window.location.origin);
@@ -60,7 +61,11 @@ socket.on("connect", () => {
     history.push("/");
   });
 
-  socket.on("POST_MSG", (roomId, roomObj, actionObj) => {});
+  socket.on("POST_MSG", (roomId, roomObj) => {
+    const { messages } = roomObj[roomId];
+
+    dispatch(postMsg(messages));
+  });
 });
 
 export const roomLog = () => socket.emit("ROOM_LOG");

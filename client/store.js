@@ -52,6 +52,10 @@ export const removeUser = (roomId, players, host) => ({
   players,
   host,
 });
+export const postMsg = (messages) => ({
+  type: POST_MSG,
+  messages,
+});
 
 // --------------------- HELPER ---------------------
 export const actionSocket = async (roomObj) => {
@@ -104,6 +108,14 @@ const reducer = (state = initialState, action) => {
           ...state.channel,
           host: action.host,
           players: action.players,
+        },
+      };
+    case POST_MSG:
+      return {
+        ...state,
+        channel: {
+          ...state.channel,
+          messages: action.messages,
         },
       };
     default:
