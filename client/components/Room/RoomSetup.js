@@ -8,7 +8,8 @@ class RoomSetup extends Component {
   }
 
   render() {
-    const players = channel.players ? Object.values(channel.players) : [];
+    const { channel } = this.props,
+      players = channel.players ? Object.values(channel.players) : [];
 
     return (
       <div className="roomSetupDiv">

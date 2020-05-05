@@ -10,6 +10,16 @@ class ChatRoom extends Component {
     };
   }
 
+  componentDidUpdate(prevProps) {
+    const prevMsgs = prevProps.messages;
+
+    if (prevMsgs && this.props.messages.length !== prevMsgs.length) {
+      const chatRoom = document.getElementById("chatMsgDiv");
+
+      chatRoom.scrollTop = chatRoom.scrollHeight - chatRoom.clientHeight;
+    }
+  }
+
   handleChange = (evt) => {
     this.setState({ [evt.target.name]: evt.target.value });
   };
@@ -34,7 +44,7 @@ class ChatRoom extends Component {
       <div className="chatFullDiv">
         <h3>Chat Room</h3>
 
-        <div className="chatMsgDiv">
+        <div id="chatMsgDiv" className="chatMsgDiv">
           {messages
             ? messages.map((m, i) =>
                 m.name ? (
