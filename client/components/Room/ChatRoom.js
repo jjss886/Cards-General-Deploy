@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, createRef } from "react";
 import { connect } from "react-redux";
 import { actionSocket } from "../../store";
 
@@ -8,6 +8,17 @@ class ChatRoom extends Component {
     this.state = {
       message: "",
     };
+    this.chatDiv = createRef();
+  }
+
+  componentDidUpdate(prevProps) {
+    const prevMsgs = prevProps.messages;
+
+    if (prevMsgs && this.props.messages.length !== prevMsgs.length) {
+      const chatRoom = this.chatDiv.current;
+
+      chatRoom.scrollTop = chatRoom.scrollHeight - chatRoom.clientHeight;
+    }
   }
 
   handleChange = (evt) => {
@@ -21,7 +32,6 @@ class ChatRoom extends Component {
       { user, roomId } = this.props;
 
     if (message.length) {
-      // NEED TO SEND MESSAGE BACK TO REDUX & SOCKET
       actionSocket({ type: "POST_MSG", roomId, name: user, message });
 
       this.setState({ message: "" });
@@ -35,13 +45,24 @@ class ChatRoom extends Component {
       <div className="chatFullDiv">
         <h3>Chat Room</h3>
 
-        <div className="chatMsgDiv">
+        <div className="chatMsgDiv" ref={this.chatDiv}>
           {messages
-            ? messages.map((m, i) => (
-                <p key={i} className={`chatMsg ${i % 2 ? "chatMsg1" : null}`}>
-                  <u>{m.name}</u>: {m.message}
-                </p>
-              ))
+            ? messages.map((m, i) =>
+                m.name ? (
+                  <p key={i} className={`chatMsg ${i % 2 ? "chatMsg1" : null}`}>
+                    {m.name}: {m.message}
+                  </p>
+                ) : (
+                  <p
+                    key={i}
+                    className={`chatMsg ${
+                      i % 2 ? "chatMsg1" : null
+                    } chatLeaveMsg`}
+                  >
+                    {m.message}
+                  </p>
+                )
+              )
             : null}
         </div>
 

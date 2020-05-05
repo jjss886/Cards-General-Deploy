@@ -46,11 +46,12 @@ export const leaveRoom = () => ({
   user: "",
   channel: {},
 });
-export const removeUser = (roomId, players, host) => ({
+export const removeUser = (roomId, players, host, messages) => ({
   type: REMOVE_USER,
   roomId,
   players,
   host,
+  messages,
 });
 export const postMsg = (messages) => ({
   type: POST_MSG,
@@ -108,6 +109,7 @@ const reducer = (state = initialState, action) => {
           ...state.channel,
           host: action.host,
           players: action.players,
+          messages: action.messages,
         },
       };
     case POST_MSG:
