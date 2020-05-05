@@ -1,11 +1,16 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { gameModes } from "../../utils/utilities";
 
 class RoomSetup extends Component {
   constructor() {
     super();
-    this.state = { mode: "none" };
+    this.state = { mode: "None" };
   }
+
+  handleChange = (evt) => {
+    this.setState({ [evt.target.name]: evt.target.value });
+  };
 
   render() {
     const { channel } = this.props,
@@ -22,6 +27,16 @@ class RoomSetup extends Component {
             {i + 1}. {p.name} points: {p.points}
           </p>
         ))}
+
+        <select
+          name="mode"
+          value={this.state.mode}
+          onChange={this.handleChange}
+        >
+          {gameModes.map((g, i) => (
+            <option key={i}>{g}</option>
+          ))}
+        </select>
       </div>
     );
   }

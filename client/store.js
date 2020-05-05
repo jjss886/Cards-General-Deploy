@@ -5,7 +5,7 @@ import axios from "axios";
 import socket from "./socket";
 
 // --------------------- INITIAL STATE ---------------------
-const initialState = { rooms: {}, channel: {}, user: "", game: "none" };
+const initialState = { rooms: {}, channel: {}, user: "", game: "None" };
 
 // --------------------- ACTION TYPES ---------------------
 const GET_ALL_ROOMS = "GET_ALL_ROOMS";
