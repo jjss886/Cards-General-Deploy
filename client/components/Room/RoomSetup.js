@@ -13,12 +13,12 @@ class RoomSetup extends Component {
 
     return (
       <div className="roomSetupDiv">
-        <p>
+        <p className="roomSetupText">
           <u>Host</u>: {channel.host}
         </p>
 
         {players.map((p, i) => (
-          <p key={i}>
+          <p key={i} className="roomSetupText">
             {i + 1}. {p.name} points: {p.points}
           </p>
         ))}
