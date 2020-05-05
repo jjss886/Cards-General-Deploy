@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, createRef } from "react";
 import { connect } from "react-redux";
 import { actionSocket } from "../../store";
 
@@ -8,13 +8,14 @@ class ChatRoom extends Component {
     this.state = {
       message: "",
     };
+    this.chatDiv = createRef();
   }
 
   componentDidUpdate(prevProps) {
     const prevMsgs = prevProps.messages;
 
     if (prevMsgs && this.props.messages.length !== prevMsgs.length) {
-      const chatRoom = document.getElementById("chatMsgDiv");
+      const chatRoom = this.chatDiv.current;
 
       chatRoom.scrollTop = chatRoom.scrollHeight - chatRoom.clientHeight;
     }
@@ -44,7 +45,7 @@ class ChatRoom extends Component {
       <div className="chatFullDiv">
         <h3>Chat Room</h3>
 
-        <div id="chatMsgDiv" className="chatMsgDiv">
+        <div className="chatMsgDiv" ref={this.chatDiv}>
           {messages
             ? messages.map((m, i) =>
                 m.name ? (
