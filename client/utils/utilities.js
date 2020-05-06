@@ -9,8 +9,8 @@ export const createDeck = () => {
 
   for (const suit of suits) {
     for (const value of values) {
-      let weight1 = parseInt(val),
-        weight2 = parseInt(val);
+      let weight1 = parseInt(value),
+        weight2 = parseInt(value);
 
       // GENERAL CARD VALUES
       if (value === "J") weight1 = 11;

@@ -3,9 +3,16 @@ import { createLogger } from "redux-logger";
 import thunkMiddlware from "redux-thunk";
 import axios from "axios";
 import socket from "./socket";
+import { createDeck } from "./utils/utilities";
 
 // --------------------- INITIAL STATE ---------------------
-const initialState = { rooms: {}, channel: {}, user: "", game: "None" };
+const initialState = {
+  rooms: {},
+  channel: {},
+  user: "",
+  game: "None",
+  live: false,
+};
 
 // --------------------- ACTION TYPES ---------------------
 const RESTORE_STATE = "RESTORE_STATE";
@@ -17,6 +24,7 @@ const JOIN_ROOM = "JOIN_ROOM";
 const LEAVE_ROOM = "LEAVE_ROOM";
 const REMOVE_USER = "REMOVE_USER";
 const POST_MSG = "POST_MSG";
+const SET_DECK = "SET_DECK";
 
 // --------------------- ACTION CREATORS ---------------------
 export const restoreState = (state) => {
@@ -27,7 +35,6 @@ export const restoreState = (state) => {
     state,
   };
 };
-
 export const getAllRooms = (rooms) => ({
   type: GET_ALL_ROOMS,
   rooms,
@@ -66,6 +73,10 @@ export const removeUser = (roomId, players, host, messages) => ({
 export const postMsg = (messages) => ({
   type: POST_MSG,
   messages,
+});
+export const setDeck = (deck = createDeck()) => ({
+  type: SET_DECK,
+  deck,
 });
 
 // --------------------- HELPER ---------------------
@@ -132,6 +143,8 @@ const reducer = (state = initialState, action) => {
           messages: action.messages,
         },
       };
+    case SET_DECK:
+      return { ...state, channel: { ...state.channel, deck: action.deck } };
     default:
       return state;
   }

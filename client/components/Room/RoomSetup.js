@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { gameModes } from "../../utils/utilities";
+import { setDeck } from "../../store";
 
 class RoomSetup extends Component {
   constructor() {
@@ -10,6 +11,10 @@ class RoomSetup extends Component {
 
   handleChange = (evt) => {
     this.setState({ [evt.target.name]: evt.target.value });
+  };
+
+  startGame = () => {
+    this.props.setDeck();
   };
 
   render() {
@@ -36,6 +41,10 @@ class RoomSetup extends Component {
           ))}
         </select>
 
+        <button type="button" onClick={this.startGame}>
+          Start!
+        </button>
+
         {players.map((p, i) => (
           <p key={i} className="roomSetupText">
             {i + 1}. {p.name} points: {p.points}
@@ -48,4 +57,8 @@ class RoomSetup extends Component {
 
 const mapState = (state) => ({ channel: state.channel });
 
-export default connect(mapState)(RoomSetup);
+const mapDispatch = (dispatch) => ({
+  setDeck: (deck) => dispatch(setDeck(deck)),
+});
+
+export default connect(mapState, mapDispatch)(RoomSetup);

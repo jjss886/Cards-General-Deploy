@@ -29,6 +29,7 @@ class Room extends Component {
 
   render() {
     const { channel } = this.props;
+
     if (channel.room) this.storageUpdate();
 
     return (
