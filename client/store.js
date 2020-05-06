@@ -8,6 +8,7 @@ import socket from "./socket";
 const initialState = { rooms: {}, channel: {}, user: "", game: "None" };
 
 // --------------------- ACTION TYPES ---------------------
+const RESTORE_STATE = "RESTORE_STATE";
 const GET_ALL_ROOMS = "GET_ALL_ROOMS";
 const CLEAR_CHANNEL = "CLEAR_CHANNEL";
 const SET_USER = "SET_USER";
@@ -18,6 +19,15 @@ const REMOVE_USER = "REMOVE_USER";
 const POST_MSG = "POST_MSG";
 
 // --------------------- ACTION CREATORS ---------------------
+export const restoreState = (state) => {
+  socket.emit("JOIN_ROOM", { roomId: state.channel.room }, true);
+
+  return {
+    type: RESTORE_STATE,
+    state,
+  };
+};
+
 export const getAllRooms = (rooms) => ({
   type: GET_ALL_ROOMS,
   rooms,
@@ -80,6 +90,8 @@ export const getAllRoomsAPI = () => async (dispatch) => {
 // --------------------- REDUCER ---------------------
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case RESTORE_STATE:
+      return action.state;
     case GET_ALL_ROOMS:
       return { ...state, rooms: action.rooms };
     case CLEAR_CHANNEL:

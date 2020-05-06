@@ -11,6 +11,7 @@ class Home extends Component {
 
   componentDidMount() {
     this.props.getAllRoomsAPI();
+    localStorage.clear();
   }
 
   roomCreate = async () => {

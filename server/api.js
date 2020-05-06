@@ -67,6 +67,7 @@ const updateRoom = (roomId, action) => {
       break;
     case "POST_MSG":
       {
+        console.log("posting -", roomObj, roomId);
         const channel = roomObj[roomId];
         channel.messages = channel.messages
           .slice(1 - msgLen)
