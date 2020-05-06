@@ -22,11 +22,9 @@ class RoomSetup extends Component {
           <u>Host</u>: {channel.host}
         </p>
 
-        {players.map((p, i) => (
-          <p key={i} className="roomSetupText">
-            {i + 1}. {p.name} points: {p.points}
-          </p>
-        ))}
+        <p className="roomSetupText">
+          <u># of Players</u>: {players.length}
+        </p>
 
         <select
           name="mode"
@@ -37,6 +35,12 @@ class RoomSetup extends Component {
             <option key={i}>{g}</option>
           ))}
         </select>
+
+        {players.map((p, i) => (
+          <p key={i} className="roomSetupText">
+            {i + 1}. {p.name} points: {p.points}
+          </p>
+        ))}
       </div>
     );
   }
