@@ -5,6 +5,7 @@ import { roomLog } from "../../socket";
 import ChatRoom from "./ChatRoom";
 import RoomSetup from "./RoomSetup";
 import Table from "../Game/Table";
+import ControlPanel from "../Game/ControlPanel";
 
 class Room extends Component {
   componentDidMount() {
@@ -37,6 +38,7 @@ class Room extends Component {
         {channel ? (
           <>
             <h3>Welcome to room: {channel.room}</h3>
+
             <div className="roomFlexDiv">
               <button type="button" onClick={this.leaveRoom} className="gBtn">
                 Leave
@@ -46,13 +48,16 @@ class Room extends Component {
                 Log Socket
               </button>
             </div>
+
             <div className="roomFlexDiv">
               <Table />
+
+              <ControlPanel />
 
               <RoomSetup />
 
               <ChatRoom />
-            </div>{" "}
+            </div>
           </>
         ) : (
           <h3>Loading</h3>
