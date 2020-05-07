@@ -49,7 +49,7 @@ const updateRoom = (roomId, action) => {
       {
         const { name } = action,
           channel = roomObj[roomId],
-          curPlayers = channel.players,
+          curPlayers = channel ? channel.players || [] : [],
           curNames = Object.keys(curPlayers);
 
         channel.messages = channel.messages
