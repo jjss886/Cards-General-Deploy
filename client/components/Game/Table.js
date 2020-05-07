@@ -11,6 +11,10 @@ class Table extends Component {
         <h3>Table</h3>
 
         {deck && deck.length ? <Card card={deck.slice(-1)[0]} /> : null}
+
+        {table && table.length ? <Card card={table.slice(-1)[0]} /> : null}
+
+        {trash && trash.length ? <Card card={trash.slice(-1)[0]} /> : null}
       </div>
     );
   }
