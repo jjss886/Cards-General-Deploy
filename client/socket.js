@@ -9,7 +9,10 @@ import store, {
   postMsg,
 } from "./store";
 
-const socket = io(window.location.origin);
+const socket = io(window.location.origin, {
+  transports: ["websocket"],
+  upgrade: false,
+});
 
 // -------------------- HELPER FUNCTIONS --------------------
 const roomState = (roomObj) =>

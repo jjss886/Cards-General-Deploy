@@ -33,11 +33,11 @@ const socketFn = (io) => {
       io.to(roomId).emit("JOIN_ROOM", roomId, roomObjRef);
     });
 
-    socket.on("JOIN_ROOM", (roomObj) => {
+    socket.on("JOIN_ROOM", (roomObj, restore) => {
       const { roomId } = roomObj;
       socket.join(roomId);
 
-      io.to(roomId).emit("JOIN_ROOM", roomId, roomObjRef);
+      if (!restore) io.to(roomId).emit("JOIN_ROOM", roomId, roomObjRef);
     });
 
     socket.on("LEAVE_ROOM", (roomObj) => {
@@ -53,7 +53,7 @@ const socketFn = (io) => {
           return a;
         }, {});
 
-      console.log("ROOM LOGGING -", roomsLog);
+      console.log("ROOM LOGGING -", roomsLog, roomObjRef);
     });
   });
 };

@@ -3,11 +3,19 @@ import { createLogger } from "redux-logger";
 import thunkMiddlware from "redux-thunk";
 import axios from "axios";
 import socket from "./socket";
+import { createDeck } from "./utils/utilities";
 
 // --------------------- INITIAL STATE ---------------------
-const initialState = { rooms: {}, channel: {}, user: "", game: "None" };
+const initialState = {
+  rooms: {},
+  channel: {},
+  user: "",
+  game: "None",
+  live: false,
+};
 
 // --------------------- ACTION TYPES ---------------------
+const RESTORE_STATE = "RESTORE_STATE";
 const GET_ALL_ROOMS = "GET_ALL_ROOMS";
 const CLEAR_CHANNEL = "CLEAR_CHANNEL";
 const SET_USER = "SET_USER";
@@ -16,8 +24,17 @@ const JOIN_ROOM = "JOIN_ROOM";
 const LEAVE_ROOM = "LEAVE_ROOM";
 const REMOVE_USER = "REMOVE_USER";
 const POST_MSG = "POST_MSG";
+const SET_DECK = "SET_DECK";
 
 // --------------------- ACTION CREATORS ---------------------
+export const restoreState = (state) => {
+  socket.emit("JOIN_ROOM", { roomId: state.channel.room }, true);
+
+  return {
+    type: RESTORE_STATE,
+    state,
+  };
+};
 export const getAllRooms = (rooms) => ({
   type: GET_ALL_ROOMS,
   rooms,
@@ -57,6 +74,10 @@ export const postMsg = (messages) => ({
   type: POST_MSG,
   messages,
 });
+export const setDeck = (deck = createDeck()) => ({
+  type: SET_DECK,
+  deck,
+});
 
 // --------------------- HELPER ---------------------
 export const actionSocket = async (roomObj) => {
@@ -80,6 +101,8 @@ export const getAllRoomsAPI = () => async (dispatch) => {
 // --------------------- REDUCER ---------------------
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case RESTORE_STATE:
+      return action.state;
     case GET_ALL_ROOMS:
       return { ...state, rooms: action.rooms };
     case CLEAR_CHANNEL:
@@ -120,6 +143,8 @@ const reducer = (state = initialState, action) => {
           messages: action.messages,
         },
       };
+    case SET_DECK:
+      return { ...state, channel: { ...state.channel, deck: action.deck } };
     default:
       return state;
   }
