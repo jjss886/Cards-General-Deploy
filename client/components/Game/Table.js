@@ -16,6 +16,10 @@ class Table extends Component {
   }
 }
 
-const mapState = (state) => ({ deck: state.channel.deck });
+const mapState = (state) => ({
+  deck: state.channel.deck,
+  table: state.channel.table,
+  trash: state.channel.trash,
+});
 
 export default connect(mapState)(Table);
