@@ -4,7 +4,7 @@ import Card from "./Card";
 
 class Table extends Component {
   render() {
-    const { deck } = this.props;
+    const { deck, table, trash } = this.props;
 
     return (
       <div className="tableFullDiv">
