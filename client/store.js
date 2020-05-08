@@ -25,6 +25,7 @@ const LEAVE_ROOM = "LEAVE_ROOM";
 const REMOVE_USER = "REMOVE_USER";
 const POST_MSG = "POST_MSG";
 const SET_DECK = "SET_DECK";
+const DRAW_CARD = "DRAW_CARD";
 
 // --------------------- ACTION CREATORS ---------------------
 export const restoreState = (state) => {
@@ -77,6 +78,11 @@ export const postMsg = (messages) => ({
 export const setDeck = (deck = createDeck()) => ({
   type: SET_DECK,
   deck,
+});
+export const drawCard = (name, card) => ({
+  type: DRAW_CARD,
+  name,
+  card,
 });
 
 // --------------------- HELPER ---------------------
@@ -145,6 +151,21 @@ const reducer = (state = initialState, action) => {
       };
     case SET_DECK:
       return { ...state, channel: { ...state.channel, deck: action.deck } };
+    case DRAW_CARD:
+      return {
+        ...state,
+        channel: {
+          ...state.channel,
+          deck: state.channel.deck.slice(0, -1),
+          players: {
+            ...state.channel.players,
+            [action.name]: {
+              ...state.channel.players[action.name],
+              hand: state.channel.players[action.name].hand.concat(action.card),
+            },
+          },
+        },
+      };
     default:
       return state;
   }
