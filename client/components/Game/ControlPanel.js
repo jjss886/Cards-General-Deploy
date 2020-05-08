@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { drawCard } from "../../store";
 
 class ControlPanel extends Component {
   render() {
@@ -19,8 +20,10 @@ class ControlPanel extends Component {
   }
 }
 
-const mapState = (state) => ({});
+const mapState = (state) => ({ user: state.user });
 
-const mapDispatch = (dispatch) => ({});
+const mapDispatch = (dispatch) => ({
+  drawCard: (name, card) => dispatch(drawCard(name, card)),
+});
 
 export default connect(mapState, mapDispatch)(ControlPanel);
