@@ -3,6 +3,11 @@ import { connect } from "react-redux";
 import { drawCard } from "../../store";
 
 class ControlPanel extends Component {
+  drawing = () => {
+    const { user, deck, drawCard } = this.props;
+    drawCard(user, deck.slice(-1));
+  };
+
   render() {
     return (
       <div className="cpFullDiv">
@@ -20,7 +25,7 @@ class ControlPanel extends Component {
   }
 }
 
-const mapState = (state) => ({ user: state.user });
+const mapState = (state) => ({ user: state.user, deck: state.deck });
 
 const mapDispatch = (dispatch) => ({
   drawCard: (name, card) => dispatch(drawCard(name, card)),

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { gameModes } from "../../utils/utilities";
-import { setDeck } from "../../store";
+import { startGame } from "../../store";
 
 class RoomSetup extends Component {
   constructor() {
@@ -13,13 +13,13 @@ class RoomSetup extends Component {
     this.setState({ [evt.target.name]: evt.target.value });
   };
 
-  startGame = () => {
-    this.props.setDeck();
+  start = () => {
+    this.props.startGame();
   };
 
   render() {
-    const { channel } = this.props,
-      players = channel.players ? Object.values(channel.players) : [];
+    const { channel, players } = this.props,
+      players = players ? Object.values(players) : [];
 
     return (
       <div className="roomSetupDiv">
@@ -41,7 +41,7 @@ class RoomSetup extends Component {
           ))}
         </select>
 
-        <button type="button" onClick={this.startGame}>
+        <button type="button" onClick={this.start}>
           Start!
         </button>
 
@@ -55,10 +55,13 @@ class RoomSetup extends Component {
   }
 }
 
-const mapState = (state) => ({ channel: state.channel });
+const mapState = (state) => ({
+  channel: state.channel,
+  players: state.channel.players,
+});
 
 const mapDispatch = (dispatch) => ({
-  setDeck: (deck) => dispatch(setDeck(deck)),
+  startGame: (deck) => dispatch(startGame(deck)),
 });
 
 export default connect(mapState, mapDispatch)(RoomSetup);

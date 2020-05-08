@@ -75,7 +75,7 @@ export const postMsg = (messages) => ({
   type: POST_MSG,
   messages,
 });
-export const setDeck = (deck = createDeck()) => ({
+export const startGame = (deck = createDeck()) => ({
   type: SET_DECK,
   deck,
 });
