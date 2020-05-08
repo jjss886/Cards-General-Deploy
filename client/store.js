@@ -75,8 +75,9 @@ export const postMsg = (messages) => ({
   type: POST_MSG,
   messages,
 });
-export const startGame = (deck = createDeck()) => ({
+export const startGame = (name, deck = createDeck()) => ({
   type: SET_DECK,
+  name,
   deck,
 });
 export const drawCard = (name, card) => ({
@@ -150,7 +151,14 @@ const reducer = (state = initialState, action) => {
         },
       };
     case SET_DECK:
-      return { ...state, channel: { ...state.channel, deck: action.deck } };
+      return {
+        ...state,
+        channel: {
+          ...state.channel,
+          livePlayer: action.name,
+          deck: action.deck,
+        },
+      };
     case DRAW_CARD:
       return {
         ...state,

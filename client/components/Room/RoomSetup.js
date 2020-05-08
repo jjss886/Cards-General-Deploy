@@ -14,7 +14,8 @@ class RoomSetup extends Component {
   };
 
   start = () => {
-    this.props.startGame();
+    const { players, startGame } = this.props;
+    startGame(Object.keys(players)[0]);
   };
 
   render() {
