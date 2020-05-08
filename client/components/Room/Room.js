@@ -50,14 +50,14 @@ class Room extends Component {
             </div>
 
             <div className="roomFlexDiv">
-              <Table />
-
               <ControlPanel />
 
               <RoomSetup />
 
               <ChatRoom />
             </div>
+
+            <Table />
           </>
         ) : (
           <h3>Loading</h3>
