@@ -10,7 +10,7 @@ class ControlPanel extends Component {
 
   next = () => {
     const { user, players, nextPlayer } = this.props,
-      curPlayers = Object.keys(players),
+      curPlayers = Object.keys(players || []),
       lenIdx = curPlayers.length - 1,
       curIdx = curPlayers.indexOf(user);
 
