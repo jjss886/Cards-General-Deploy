@@ -20,7 +20,7 @@ class RoomSetup extends Component {
 
   render() {
     const { channel, players } = this.props,
-      players = players ? Object.values(players) : [];
+      curPlayers = Object.values(players || []);
 
     return (
       <div className="roomSetupDiv">
@@ -29,7 +29,7 @@ class RoomSetup extends Component {
         </p>
 
         <p className="roomSetupText">
-          <u># of Players</u>: {players.length}
+          <u># of Players</u>: {curPlayers.length}
         </p>
 
         <select
@@ -46,7 +46,7 @@ class RoomSetup extends Component {
           Start!
         </button>
 
-        {players.map((p, i) => (
+        {curPlayers.map((p, i) => (
           <p key={i} className="roomSetupText">
             {i + 1}. {p.name} points: {p.points}
           </p>

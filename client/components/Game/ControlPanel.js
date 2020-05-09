@@ -10,11 +10,12 @@ class ControlPanel extends Component {
 
   next = () => {
     const { user, players, nextPlayer } = this.props,
-      lenIdx = players.length - 1,
-      curIdx = players.indexOf(user);
+      curPlayers = Object.keys(players || []),
+      lenIdx = curPlayers.length - 1,
+      curIdx = curPlayers.indexOf(user);
 
-    if (lenIdx === curIdx) nextPlayer(players[0]);
-    else nextPlayer(players[curIdx + 1]);
+    if (lenIdx === curIdx) nextPlayer(curPlayers[0]);
+    else nextPlayer(curPlayers[curIdx + 1]);
   };
 
   render() {
